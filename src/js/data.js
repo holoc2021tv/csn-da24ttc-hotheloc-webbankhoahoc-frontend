@@ -300,7 +300,7 @@ var DANH_SACH_KHOA_HOC_GOC = [
         "isNew": true,
         "duration": "26 giờ học",
         "lessonsCount": 38,
-        "description": "Ứng dụng LocalStorage và SessionStorage để xây dựng giỏ hàng, lịch sử đơn hàng và phiên đăng nhập.",
+        "description": "Ứng dụng LocalStorage để xây dựng giỏ hàng, lịch sử đơn hàng và phiên đăng nhập.",
         "level": "Cơ bản"
     },
     {
@@ -1225,7 +1225,7 @@ function saoLuuDuLieuKhoaHoc(danhSachCu, phienBanCu) {
 }
 
 /**
- * 3.2. Chuyen doi danh sach khoa hoc cu sang cau truc phien ban moi (bao toan ca truong level - DT-01)
+ * 3.2. Chuyen doi danh sach khoa hoc cu sang cau truc phien ban moi (bao toan ca truong level)
  */
 function chuyenDoiDuLieuKhoaHoc(danhSachCu) {
     if (!Array.isArray(danhSachCu)) {
@@ -1290,7 +1290,7 @@ function khoiPhucDuLieuKhoaHocTuSaoLuu() {
 }
 
 /**
- * 3.4. Khoi tao va bao ve du lieu khoa hoc (phan biet ro: chua ton tai / mang rong hop le / JSON loi - DT-02)
+ * 3.4. Khoi tao va bao ve du lieu khoa hoc (phan biet ro: chua ton tai / mang rong hop le / JSON loi)
  */
 function khoiTaoDuLieuKhoaHoc() {
     var phienBanDaLuu = null;
@@ -1491,7 +1491,7 @@ function timKhoaHocTheoMa(maKhoaHoc) {
 }
 
 /**
- * 11. Ghi nhan luot Click khi nguoi dung bam vao khoa hoc (chi tang clicks, log CLICK - AN-01)
+ * 11. Ghi nhan luot Click khi nguoi dung bam vao khoa hoc (chi tang clicks, log CLICK)
  */
 function tangLuotClickKhoaHoc(maKhoaHoc) {
     var ketQuaDoc = docDuLieuJSONCoTrangThai(KHOA_LUU_KHOA_HOC, true);
@@ -1518,7 +1518,7 @@ function tangLuotClickKhoaHoc(maKhoaHoc) {
 }
 
 /**
- * 12. Ghi nhan luot Xem khi nguoi dung mo trang Chi tiet khoa hoc (chi tang views, KHONG tang clicks - AN-01)
+ * 12. Ghi nhan luot Xem khi nguoi dung mo trang Chi tiet khoa hoc (chi tang views, KHONG tang clicks)
  */
 function tangLuotXemKhoaHoc(maKhoaHoc) {
     var ketQuaDoc = docDuLieuJSONCoTrangThai(KHOA_LUU_KHOA_HOC, true);

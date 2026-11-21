@@ -97,7 +97,8 @@ function ganSuKienBieuMauDangNhap() {
                 role: laVaiTroQuanTri ? 'admin' : 'student'
             };
 
-            if (!luuNguoiDungHienTai(nguoiDungHienTai, ghiNhoPhien)) {
+            nguoiDungHienTai.rememberSession = ghiNhoPhien;
+            if (!luuNguoiDungHienTai(nguoiDungHienTai)) {
                 hienThiThongBao('Không thể lưu phiên đăng nhập vào trình duyệt (bộ nhớ đầy hoặc bị chặn).', 'danger');
                 return;
             }

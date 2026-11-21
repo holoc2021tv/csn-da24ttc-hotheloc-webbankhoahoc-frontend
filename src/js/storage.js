@@ -1,6 +1,6 @@
 /**
  * FILE: src/js/storage.js
- * NHIEM VU: Lop luu tru dung chung an toan cho LocalStorage/SessionStorage, chong XSS,
+ * NHIEM VU: Lop luu tru dung chung an toan cho LocalStorage, chong XSS,
  * sinh ma duy nhat, kiem tra quyen so huu theo trang thai don hang, quan ly Gio hang,
  * Don hang, Danh gia (chi nguoi da mua hop le), Yeu thich, Da xem, Lien he, Voucher va Tien do hoc.
  */
@@ -156,43 +156,7 @@ function xoaDuLieuKho(khoa) {
 }
 
 /**
- * 0.4c. Doc / Luu / Xoa du lieu an toan trong SessionStorage
- */
-function docPhienJSON(khoa, giaTriMacDinh) {
-    try {
-        var duLieu = sessionStorage.getItem(khoa);
-        if (duLieu === null) {
-            return giaTriMacDinh;
-        }
-        return JSON.parse(duLieu);
-    } catch (loi) {
-        console.error('Khong the doc SessionStorage:', khoa, loi);
-        return giaTriMacDinh;
-    }
-}
-
-function luuPhienJSON(khoa, giaTri) {
-    try {
-        sessionStorage.setItem(khoa, JSON.stringify(giaTri));
-        return true;
-    } catch (loi) {
-        console.error('Khong the luu SessionStorage:', khoa, loi);
-        return false;
-    }
-}
-
-function xoaPhienKho(khoa) {
-    try {
-        sessionStorage.removeItem(khoa);
-        return true;
-    } catch (loi) {
-        console.error('Khong the xoa SessionStorage:', khoa, loi);
-        return false;
-    }
-}
-
-/**
- * 0.4d. Sinh ma dinh danh duy nhat phia client (tranh trung trong cung mili-giay - ID-01)
+ * 0.4d. Sinh ma dinh danh duy nhat phia client (tranh trung trong cung mili-giay)
  */
 function taoMaDuyNhat(tienTo, mangHienCo, tenTruong) {
     var danhSach = Array.isArray(mangHienCo) ? mangHienCo : [];
@@ -223,43 +187,25 @@ function taoMaDuyNhat(tienTo, mangHienCo, tenTruong) {
 }
 
 /**
- * 0.4e. Quan ly phien dang nhap thong nhat (ho tro Ghi nho -> LocalStorage, khong ghi nho -> SessionStorage)
+ * 0.4e. Quan ly phien dang nhap thong nhat trong LocalStorage (EDU_CURRENT_USER)
  */
 function layNguoiDungHienTai() {
     var ketQuaLocal = docDuLieuJSONCoTrangThai(KHOA_LUU_PHIEN_DANG_NHAP, false);
     if (ketQuaLocal.tonTai && ketQuaLocal.hopLe && ketQuaLocal.duLieu && ketQuaLocal.duLieu.email) {
         return ketQuaLocal.duLieu;
     }
-    var phienTam = docPhienJSON(KHOA_LUU_PHIEN_DANG_NHAP, null);
-    if (phienTam && typeof phienTam === 'object' && phienTam.email) {
-        return phienTam;
-    }
     return null;
 }
 
-function luuNguoiDungHienTai(nguoiDung, ghiNhoDangNhap) {
+function luuNguoiDungHienTai(nguoiDung) {
     if (!nguoiDung || typeof nguoiDung !== 'object') {
         return false;
     }
-    var suDungLocal = (ghiNhoDangNhap !== false);
-    if (suDungLocal) {
-        var ketQuaLuu = luuDuLieuJSON(KHOA_LUU_PHIEN_DANG_NHAP, nguoiDung);
-        if (ketQuaLuu) {
-            xoaPhienKho(KHOA_LUU_PHIEN_DANG_NHAP);
-        }
-        return ketQuaLuu;
-    }
-    var ketQuaPhien = luuPhienJSON(KHOA_LUU_PHIEN_DANG_NHAP, nguoiDung);
-    if (ketQuaPhien) {
-        xoaDuLieuKho(KHOA_LUU_PHIEN_DANG_NHAP);
-    }
-    return ketQuaPhien;
+    return luuDuLieuJSON(KHOA_LUU_PHIEN_DANG_NHAP, nguoiDung);
 }
 
 function xoaNguoiDungHienTai() {
-    var xoaLocal = xoaDuLieuKho(KHOA_LUU_PHIEN_DANG_NHAP);
-    var xoaSession = xoaPhienKho(KHOA_LUU_PHIEN_DANG_NHAP);
-    return xoaLocal || xoaSession;
+    return xoaDuLieuKho(KHOA_LUU_PHIEN_DANG_NHAP);
 }
 
 /**
@@ -389,7 +335,7 @@ function layEmailNguoiDungDangNhap() {
 }
 
 /**
- * 0.5b. Kiem tra trang thai don hang co du dieu kien cap quyen hoc hay khong (OWN-01)
+ * 0.5b. Kiem tra trang thai don hang co du dieu kien cap quyen hoc hay khong
  * Chi cac don thanh toan mo phong thanh cong / da kich hoat moi duoc cap quyen.
  */
 function kiemTraTrangThaiDonHopLe(donHang) {
@@ -446,7 +392,7 @@ function kiemTraDaMuaKhoaHoc(maKhoaHoc, emailChiDinh) {
 }
 
 /**
- * 0.7. Hop nhat gio khach vao tai khoan vua dang nhap & loc bo cac khoa hoc da so huu (F-02)
+ * 0.7. Hop nhat gio khach vao tai khoan vua dang nhap & loc bo cac khoa hoc da so huu
  */
 function locBoKhoaHocDaSoHuuKhoiGio() {
     var emailHienTai = layEmailNguoiDungDangNhap();
@@ -507,7 +453,7 @@ function locBoKhoaHocDaSoHuuKhoiGio() {
 }
 
 /**
- * 1. Lay danh sach san pham trong gio hang theo dung tai khoan dang dang nhap (hoac gio khach - F-02)
+ * 1. Lay danh sach san pham trong gio hang theo dung tai khoan dang dang nhap (hoac gio khach)
  */
 function layGioHang() {
     var tatCaGio = docDuLieuJSON(KHOA_LUU_GIO_HANG, []);
@@ -527,7 +473,7 @@ function layGioHang() {
 }
 
 /**
- * 2. Luu mang gio hang cua tai khoan hien tai vao LocalStorage (bao toan gio cua tai khoan khac - F-02)
+ * 2. Luu mang gio hang cua tai khoan hien tai vao LocalStorage (bao toan gio cua tai khoan khac)
  */
 function luuGioHang(mangGioHang) {
     var emailHienTai = layEmailNguoiDungDangNhap();
@@ -811,7 +757,7 @@ function luuTatCaDonHang(mangDonHang) {
 
 /**
  * 13. Quan ly Danh gia sao cho tung khoa hoc (EDU_REVIEWS)
- * Rang buoc nhat quan (ADM-06): Chi tai khoan da mua khoa hoc voi don hang hop le moi duoc danh gia (1 lan/khoa hoc).
+ * Rang buoc nhat quan: Chi tai khoan da mua khoa hoc voi don hang hop le moi duoc danh gia (1 lan/khoa hoc).
  */
 function layTatCaDanhGia() {
     var kiemTra = docDuLieuJSONCoTrangThai(KHOA_LUU_DANH_GIA, true);
@@ -1031,7 +977,7 @@ function taoMaHTMLTheKhoaHoc(khoaHoc, tienToLop) {
 }
 
 /**
- * 16. Kiem tra quyen gui danh gia sao cua nguoi dung hien tai (nhat quan ADM-06)
+ * 16. Kiem tra quyen gui danh gia sao cua nguoi dung hien tai
  */
 function kiemTraQuyenGuiDanhGia(maKhoaHoc) {
     var nguoiDung = layNguoiDungHienTai();

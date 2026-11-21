@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /**
- * Lay tai khoan dang dang nhap da doi chieu voi EDU_USERS (CK-03)
+ * Lay tai khoan dang dang nhap da doi chieu voi EDU_USERS
  */
 function layTaiKhoanThanhToanHopLe() {
     var phienHienTai = layNguoiDungHienTai();
@@ -101,7 +101,7 @@ function ganSuKienChonThanhToan() {
 }
 
 /**
- * Ham tinh toan tap trung duy nhat cho ca hien thi tom tat va tao don hang (EC-01 & CK-02)
+ * Ham tinh toan tap trung duy nhat cho ca hien thi tom tat va tao don hang
  * Luon doc gia moi nhat tu EDU_COURSES, kiem tra so huu han khong am va phat hien thay doi gia.
  */
 function tinhToanGiaTriDonHang(danhSachGioHang, maVoucher) {
@@ -291,7 +291,7 @@ function hienThiTomTatDonHang() {
 }
 
 function kiemTraDuLieuThanhToan(oSoDienThoai) {
-    // Bat buoc dang nhap va gan chat don hang voi tai khoan hien tai (CK-03)
+    // Bat buoc dang nhap va gan chat don hang voi tai khoan hien tai
     var taiKhoanHopLe = layTaiKhoanThanhToanHopLe();
     if (!taiKhoanHopLe || !taiKhoanHopLe.email) {
         luuThongBaoChoChuyenTrang('Vui lòng đăng nhập tài khoản trước khi xác nhận thanh toán!', 'warning');
@@ -339,7 +339,7 @@ function kiemTraDuLieuThanhToan(oSoDienThoai) {
 }
 
 /**
- * Thuc hien commit co kiem soat voi snapshot/rollback va chong tao don trung lap (CK-01, EC-01, CK-02, CK-03)
+ * Thuc hien commit co kiem soat voi snapshot/rollback va chong tao don trung lap
  */
 function taoVaLuuDonHangMoPhong(thongTinNguoiMua, boQuaXacNhan) {
     if (dangXuLyThanhToan) {
@@ -415,7 +415,7 @@ function taoVaLuuDonHangMoPhong(thongTinNguoiMua, boQuaXacNhan) {
         return { success: false, message: 'EDU_PURCHASES bị lỗi JSON.' };
     }
 
-    // Chup ban sao truoc khi ghi de rollback neu co loi giua chung (CK-01)
+    // Chup ban sao truoc khi ghi de rollback neu co loi giua chung
     var banSaoDonHangGoc = kiemTraDonHang.duLieu.slice();
     var kiemTraKhoaHoc = docDuLieuJSONCoTrangThai(KHOA_LUU_KHOA_HOC, true);
     if (kiemTraKhoaHoc.tonTai && !kiemTraKhoaHoc.hopLe) {

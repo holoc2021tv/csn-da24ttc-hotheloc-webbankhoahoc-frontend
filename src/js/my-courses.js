@@ -1,8 +1,8 @@
 /**
  * FILE: src/js/my-courses.js
  * NHIEM VU: Doc du lieu an toan tu EDU_PURCHASES theo dung tai khoan dang dang nhap
- * va chi cap quyen hoc cho cac don hang co trang thai hop le (OWN-01),
- * theo doi tien do mo phong va xac minh dieu kien cap chung nhan ngay trong ham (CERT-01..03).
+ * va chi cap quyen hoc cho cac don hang co trang thai hop le,
+ * theo doi tien do mo phong va xac minh dieu kien cap chung nhan ngay trong ham.
  */
 
 var daGanSuKienInChungNhan = false;
@@ -94,7 +94,7 @@ function hienThiKhoaHocVaDonHangCuaToi() {
         }
     }
 
-    // Chi don hang co trang thai hop le (OWN-01) moi duoc cap quyen hoc
+    // Chi don hang co trang thai hop le moi duoc cap quyen hoc
     var danhSachKhoaHocDaMua = [];
     for (var m = 0; m < donHangCuaToi.length; m++) {
         var donHang = donHangCuaToi[m];
@@ -256,7 +256,7 @@ function moHopThoaiVideoBaiGiang(maKhoaHoc) {
 }
 
 /**
- * Xac minh quyen so huu va tien do >= 100% ngay trong ham truoc khi cap chung nhan mo phong (CERT-01..03)
+ * Xac minh quyen so huu va tien do >= 100% ngay trong ham truoc khi cap chung nhan mo phong
  */
 function moHopThoaiChungNhan(maKhoaHoc) {
     var ketQua = layHoacCapChungNhanKhoaHoc(maKhoaHoc);

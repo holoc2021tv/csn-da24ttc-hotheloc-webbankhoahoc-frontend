@@ -222,13 +222,13 @@ function luuThongBaoChoChuyenTrang(noiDungThongBao, loaiThongBao) {
         message: noiDungThongBao,
         type: loaiThongBao || 'success'
     };
-    luuPhienJSON('EDU_PENDING_TOAST', duLieuThongBao);
+    return luuDuLieuJSON('EDU_PENDING_TOAST', duLieuThongBao);
 }
 
 function kiemTraVaHienThiThongBaoCho() {
-    var thongBao = docPhienJSON('EDU_PENDING_TOAST', null);
+    var thongBao = docDuLieuJSON('EDU_PENDING_TOAST', null);
     if (thongBao) {
-        xoaPhienKho('EDU_PENDING_TOAST');
+        xoaDuLieuKho('EDU_PENDING_TOAST');
         if (thongBao.message) {
             hienThiThongBao(thongBao.message, thongBao.type);
         }

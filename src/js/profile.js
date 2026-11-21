@@ -1,6 +1,6 @@
 /**
  * FILE: src/js/profile.js
- * NHIEM VU: Doc va cap nhat thong tin Ho so ca nhan an toan tu LocalStorage/SessionStorage
+ * NHIEM VU: Doc va cap nhat thong tin Ho so ca nhan an toan tu LocalStorage
  * (kiem tra trang thai luu va hoan tac neu ghi phien that bai).
  */
 
@@ -163,8 +163,7 @@ function ganSuKienCapNhatHoSo() {
             role: vaiTro
         };
 
-        var dangDungLocal = docDuLieuJSONCoTrangThai(KHOA_LUU_PHIEN_DANG_NHAP, false).tonTai;
-        if (!luuNguoiDungHienTai(phienCapNhat, dangDungLocal)) {
+        if (!luuNguoiDungHienTai(phienCapNhat)) {
             // Hoan tac EDU_USERS neu khong cap nhat duoc phien
             luuDuLieuJSON('EDU_USERS', banSaoUsersGoc);
             hienThiThongBao('Không thể đồng bộ phiên đăng nhập. Hệ thống đã giữ nguyên dữ liệu cũ.', 'danger');
