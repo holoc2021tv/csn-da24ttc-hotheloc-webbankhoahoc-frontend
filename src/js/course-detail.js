@@ -104,17 +104,23 @@ function hienThiGiaoDienChiTiet(khoaHoc) {
     hienThiLoTrinhKhoaHoc(khoaHoc);
     ganSuKienHocThuKhoaHoc(khoaHoc);
 
+    var daSoHuu = kiemTraDaMuaKhoaHoc(khoaHoc.id);
+    var dangMoBan = kiemTraKhoaHocDangMo(khoaHoc);
     var nutMuaNgay = document.getElementById('nut-mua-ngay-chi-tiet');
     if (nutMuaNgay) {
-        if (kiemTraDaMuaKhoaHoc(khoaHoc.id)) {
+        if (daSoHuu) {
             nutMuaNgay.className = 'btn btn-success btn-lg fw-semibold';
             nutMuaNgay.innerHTML = '<i class="bi bi-play-circle-fill me-2"></i>Vào học ngay';
+        } else if (!dangMoBan) {
+            nutMuaNgay.className = 'btn btn-secondary btn-lg fw-semibold';
+            nutMuaNgay.disabled = true;
+            nutMuaNgay.innerHTML = '<i class="bi bi-eye-slash me-2"></i>Khóa học tạm ngừng mở bán';
         }
         nutMuaNgay.addEventListener('click', function() {
             tangLuotClickKhoaHoc(khoaHoc.id);
             if (kiemTraDaMuaKhoaHoc(khoaHoc.id)) {
                 luuThongBaoChoChuyenTrang('Bạn đã sở hữu khóa học này! Đang chuyển tới Khóa học của tôi.', 'info');
-                window.location.href = 'my-courses.html';
+                window.location.href = layDuongDanTrang('my-courses.html');
                 return;
             }
             var gio = layGioHang();
@@ -126,14 +132,22 @@ function hienThiGiaoDienChiTiet(khoaHoc) {
                 }
             }
             if (!daTrongGio) {
-                themVaoGio(khoaHoc.id, 1);
+                var ketQuaThem = themVaoGio(khoaHoc.id, 1);
+                if (!ketQuaThem.success) {
+                    hienThiThongBao(ketQuaThem.message || 'Không thể thêm khóa học vào giỏ hàng.', 'danger');
+                    return;
+                }
             }
-            window.location.href = 'checkout.html';
+            window.location.href = layDuongDanTrang('checkout.html');
         });
     }
 
     var nutThemGio = document.getElementById('nut-them-gio-chi-tiet');
     if (nutThemGio) {
+        if (!daSoHuu && !dangMoBan) {
+            nutThemGio.disabled = true;
+            nutThemGio.textContent = 'Đang tạm ẩn';
+        }
         nutThemGio.addEventListener('click', function() {
             tangLuotClickKhoaHoc(khoaHoc.id);
             var ketQua = themVaoGio(khoaHoc.id, 1);
@@ -149,9 +163,13 @@ function hienThiGiaoDienChiTiet(khoaHoc) {
     if (nutYeuThich) {
         capNhatNutYeuThichChiTiet(nutYeuThich, khoaHoc.id);
         nutYeuThich.addEventListener('click', function() {
-            var daThem = batTatKhoaHocYeuThich(khoaHoc.id);
+            var ketQuaYeuThich = batTatKhoaHocYeuThich(khoaHoc.id);
+            if (!ketQuaYeuThich.success) {
+                hienThiThongBao(ketQuaYeuThich.message || 'Không thể cập nhật danh sách Yêu thích.', 'danger');
+                return;
+            }
             capNhatNutYeuThichChiTiet(nutYeuThich, khoaHoc.id);
-            if (daThem) {
+            if (ketQuaYeuThich.daThem) {
                 hienThiThongBao('Đã lưu khóa học vào danh sách Yêu thích!', 'success');
             } else {
                 hienThiThongBao('Đã xóa khóa học khỏi danh sách Yêu thích.', 'info');
@@ -526,4 +544,19 @@ function hienThiPhanBoSao(danhSachDanhGia) {
         maHTML += '</div>';
     }
     khungPhanBo.innerHTML = maHTML;
+}
+
+function capNhatGiaoDienKhiDongBoTab(khoaThayDoi) {
+    if (khoaThayDoi === 'EDU_REVIEWS' || khoaThayDoi === 'EDU_COURSES' || khoaThayDoi === 'EDU_PURCHASES') {
+        var thamSoUrl = new URLSearchParams(window.location.search);
+        var maKhoaHoc = thamSoUrl.get('id');
+        if (maKhoaHoc) {
+            var kh = timKhoaHocTheoMa(maKhoaHoc);
+            if (kh) {
+                capNhatSoLieuChiTiet(kh);
+            }
+            hienThiDanhSachBinhLuan(maKhoaHoc);
+            capNhatTrangThaiQuyenDanhGia(maKhoaHoc);
+        }
+    }
 }

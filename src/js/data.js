@@ -1189,7 +1189,6 @@ function layChuoiNgayHomNay() {
 function ghiNhatKyTuongTac(loaiSuKien, maKhoaHoc, giaTriSoTien) {
     var ketQuaDoc = docDuLieuJSONCoTrangThai('EDU_ANALYTICS_LOGS', true);
     if (ketQuaDoc.tonTai && !ketQuaDoc.hopLe) {
-        console.error('Bo qua ghi nhat ky vi EDU_ANALYTICS_LOGS dang bi loi JSON.');
         return false;
     }
 
@@ -1244,6 +1243,7 @@ function chuyenDoiDuLieuKhoaHoc(danhSachCu) {
             title: String(banGhiCu.title),
             category: banGhiCu.category || 'Frontend',
             level: banGhiCu.level || 'Cơ bản',
+            status: banGhiCu.status || 'active',
             instructor: banGhiCu.instructor || 'Giảng viên EduCourses',
             originalPrice: Number(banGhiCu.originalPrice || 0),
             salePrice: Number(banGhiCu.salePrice || 0),
@@ -1293,17 +1293,11 @@ function khoiPhucDuLieuKhoaHocTuSaoLuu() {
  * 3.4. Khoi tao va bao ve du lieu khoa hoc (phan biet ro: chua ton tai / mang rong hop le / JSON loi)
  */
 function khoiTaoDuLieuKhoaHoc() {
-    var phienBanDaLuu = null;
-    try {
-        phienBanDaLuu = localStorage.getItem(KHOA_LUU_PHIEN_BAN_DU_LIEU);
-    } catch (loiDocVer) {
-        phienBanDaLuu = null;
-    }
+    var phienBanDaLuu = docChuoiThoLocal(KHOA_LUU_PHIEN_BAN_DU_LIEU, null);
     var ketQuaDoc = docDuLieuJSONCoTrangThai(KHOA_LUU_KHOA_HOC, true);
 
     // Truong hop 1: Du lieu dang bi loi JSON -> khong ghi de, giu nguyen chuoi goc de kiem tra/khoi phuc
     if (ketQuaDoc.tonTai && !ketQuaDoc.hopLe) {
-        console.error('EDU_COURSES dang chua JSON khong hop le. He thong giu nguyen du lieu goc va khoa ghi de.');
         return false;
     }
 
@@ -1345,7 +1339,6 @@ function khoiTaoDuLieuKhoaHoc() {
         luuChuoiThoLocal(KHOA_LUU_PHIEN_BAN_DU_LIEU, PHIEN_BAN_DU_LIEU_HIEN_TAI);
         return true;
     } catch (loi) {
-        console.error('Chuyen doi phien ban khoa hoc that bai, khoi phuc tu ban sao luu:', loi);
         khoiPhucDuLieuKhoaHocTuSaoLuu();
         return false;
     }
@@ -1374,7 +1367,6 @@ function luuTatCaKhoaHoc(mangKhoaHoc) {
     }
     var ketQuaHienTai = docDuLieuJSONCoTrangThai(KHOA_LUU_KHOA_HOC, true);
     if (ketQuaHienTai.tonTai && !ketQuaHienTai.hopLe) {
-        console.error('Tu choi ghi de EDU_COURSES vi du lieu hien tai dang bi loi JSON.');
         return false;
     }
     return luuDuLieuJSON(KHOA_LUU_KHOA_HOC, mangKhoaHoc);
@@ -1387,7 +1379,7 @@ function layKhoaHocNoiBat() {
     var danhSachKhoaHoc = layTatCaKhoaHoc();
     var ketQua = [];
     for (var i = 0; i < danhSachKhoaHoc.length; i++) {
-        if (danhSachKhoaHoc[i].isFeatured === true) {
+        if (danhSachKhoaHoc[i].isFeatured === true && kiemTraKhoaHocDangMo(danhSachKhoaHoc[i])) {
             ketQua.push(danhSachKhoaHoc[i]);
         }
     }
@@ -1401,7 +1393,7 @@ function layKhoaHocBanChay() {
     var danhSachKhoaHoc = layTatCaKhoaHoc();
     var danhSachSaoChep = [];
     for (var i = 0; i < danhSachKhoaHoc.length; i++) {
-        danhSachSaoChep.push(danhSachKhoaHoc[i]);
+        if (kiemTraKhoaHocDangMo(danhSachKhoaHoc[i])) { danhSachSaoChep.push(danhSachKhoaHoc[i]); }
     }
 
     danhSachSaoChep.sort(function(a, b) {
@@ -1429,7 +1421,7 @@ function layKhoaHocMoi() {
     var danhSachKhoaHoc = layTatCaKhoaHoc();
     var ketQua = [];
     for (var i = 0; i < danhSachKhoaHoc.length; i++) {
-        if (danhSachKhoaHoc[i].isNew === true) {
+        if (danhSachKhoaHoc[i].isNew === true && kiemTraKhoaHocDangMo(danhSachKhoaHoc[i])) {
             ketQua.push(danhSachKhoaHoc[i]);
         }
     }
@@ -1521,6 +1513,10 @@ function tangLuotClickKhoaHoc(maKhoaHoc) {
  * 12. Ghi nhan luot Xem khi nguoi dung mo trang Chi tiet khoa hoc (chi tang views, KHONG tang clicks)
  */
 function tangLuotXemKhoaHoc(maKhoaHoc) {
+    var duocTinhLuotMoi = (typeof ghiNhanLuotXemKhoaHoc === 'function') ? ghiNhanLuotXemKhoaHoc(maKhoaHoc) : true;
+    if (!duocTinhLuotMoi) {
+        return timKhoaHocTheoMa(maKhoaHoc);
+    }
     var ketQuaDoc = docDuLieuJSONCoTrangThai(KHOA_LUU_KHOA_HOC, true);
     if (ketQuaDoc.tonTai && !ketQuaDoc.hopLe) {
         return null;

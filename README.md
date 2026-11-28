@@ -12,8 +12,8 @@
 
 ## 1. Giới thiệu đề tài
 Đề tài tập trung thiết kế và cài đặt giao diện front-end cho website bán khóa học trực tuyến **EduCourses**. Hệ thống mô phỏng đầy đủ các luồng thao tác phía trình duyệt cho cả người học và quản trị viên:
-- Duyệt danh mục **55 khóa học** thuộc 6 chuyên ngành (Frontend, JavaScript, Database, Công cụ, Phân tích hệ thống, Kỹ năng mềm) và 3 trình độ (Cơ bản, Trung cấp, Nâng cao).
-- Tìm kiếm theo từ khóa, lọc đa tiêu chí theo chuyên ngành, trình độ, mức học phí và sắp xếp kết quả.
+- Duyệt danh mục **55 khóa học** thuộc 6 chuyên ngành (Frontend, JavaScript, Database, Công cụ, Phân tích hệ thống, Kỹ năng mềm) và 3 cấp độ (Cơ bản, Trung cấp, Nâng cao).
+- Tìm kiếm theo từ khóa, lọc đa tiêu chí theo chuyên ngành, cấp độ, mức học phí và sắp xếp kết quả.
 - Xem chi tiết khóa học, xem video học thử bài 1 miễn phí, đánh giá từ 1 đến 5 sao và lưu vào danh sách yêu thích.
 - Quản lý giỏ hàng, áp mã giảm giá, thanh toán giả lập qua mã QR, quản lý hồ sơ cá nhân, theo dõi khóa học đã kích hoạt và tra cứu lịch sử đơn hàng.
 - Gửi biểu mẫu liên hệ hỗ trợ và quản trị khóa học, tài khoản người dùng trên trang Admin Dashboard.
@@ -25,8 +25,8 @@
 ## 3. Công nghệ sử dụng
 - **Cấu trúc và định dạng:** HTML5 ngữ nghĩa, CSS3 (biến `:root`, Flexbox, CSS Grid, Media Queries).
 - **Thư viện giao diện:** Bootstrap 5.3.3 và Bootstrap Icons 1.11.3 (nhúng qua CDN).
-- **Xử lý logic phía trình duyệt:** Vanilla JavaScript (15 tệp tách theo từng trang và chức năng).
-- **Lưu trữ dữ liệu phía trình duyệt:** Web Storage API (`LocalStorage` và `SessionStorage`).
+- **Xử lý logic phía trình duyệt:** JavaScript ES5 thuần (16 tệp tách theo từng trang và chức năng).
+- **Lưu trữ dữ liệu phía trình duyệt:** `localStorage`, được truy cập tập trung qua `src/js/storage.js`.
 - **Công cụ phát triển và triển khai:** Visual Studio Code, Git, GitHub, GitHub Pages.
 
 ## 4. Phạm vi và giới hạn kỹ thuật
@@ -37,8 +37,9 @@
 ## 5. Cấu trúc cây thư mục Repository
 ```text
 csn-da24ttc-hotheloc-webbankhoahoc-frontend/
-├── index.html                          # Tệp chuyển hướng GitHub Pages sang src/index.html
+├── index.html                          # Trang chủ và điểm vào GitHub Pages / Live Server
 ├── README.md                           # Tài liệu giới thiệu, hướng dẫn chạy và thông tin liên lạc
+├── BAO_CAO_KIEM_THU_TOAN_DIEN.md        # Báo cáo rà soát trước khi push
 ├── progress-report/                    # [Bắt buộc] Báo cáo tiến độ thực hiện hằng tuần
 │   └── BAO CAO TIEN DO 2026.doc
 ├── thesis/                             # [Bắt buộc] Tài liệu văn bản của Đồ án
@@ -49,12 +50,13 @@ csn-da24ttc-hotheloc-webbankhoahoc-frontend/
 │   └── refs/                           # Tài liệu tham khảo của đồ án
 ├── src/                                # Mã nguồn chính của website EduCourses
 │   ├── assets/
-│   │   └── images/                     # 05 tệp SVG (logo, logo-light, 3 banner liveshow)
+│   │   └── images/                     # Logo EduCourses và 3 banner liveshow
 │   ├── css/
 │   │   └── style.css                   # Biến CSS (:root), bố cục Grid/Flexbox và Responsive
 │   ├── js/
 │   │   ├── about.js                    # Thống kê số liệu tương tác thực tế trên trang Giới thiệu
 │   │   ├── admin.js                    # Quản trị khóa học, tài khoản người dùng và đơn hàng
+│   │   ├── admin-login.js              # Đăng nhập Quản trị viên
 │   │   ├── auth.js                     # Duy trì phiên đăng nhập và cập nhật thanh điều hướng
 │   │   ├── cart.js                     # Hiển thị, tính tổng tiền và xóa khóa học khỏi giỏ hàng
 │   │   ├── checkout.js                 # Kiểm duyệt biểu mẫu, thanh toán giả lập và lưu đơn hàng
@@ -67,19 +69,20 @@ csn-da24ttc-hotheloc-webbankhoahoc-frontend/
 │   │   ├── my-courses.js               # Hiển thị khóa học đã kích hoạt, tiến độ và lịch sử đơn
 │   │   ├── profile.js                  # Cập nhật hồ sơ cá nhân, đổi mật khẩu và yêu thích
 │   │   ├── register.js                 # Đăng ký tài khoản mới và kiểm duyệt dữ liệu đầu vào
-│   │   └── storage.js                  # Tầng tiện ích đọc/ghi LocalStorage và SessionStorage
-│   ├── about.html                      # Trang Giới thiệu nền tảng
-│   ├── admin.html                      # Trang Quản trị hệ thống (Admin Dashboard)
-│   ├── cart.html                       # Trang Giỏ hàng
-│   ├── checkout.html                   # Trang Thanh toán giả lập
-│   ├── contact.html                    # Trang Liên hệ và Hỗ trợ
-│   ├── course-detail.html              # Trang Chi tiết khóa học
-│   ├── courses.html                    # Trang Danh sách khóa học
-│   ├── index.html                      # Trang chủ
-│   ├── login.html                      # Trang Đăng nhập
-│   ├── my-courses.html                 # Trang Khóa học của tôi và Lịch sử đơn hàng
-│   ├── profile.html                    # Trang Hồ sơ cá nhân
-│   └── register.html                   # Trang Đăng ký tài khoản
+│   │   └── storage.js                  # Tầng tiện ích đọc/ghi LocalStorage
+│   └── html/                           # Các trang HTML đang được ứng dụng sử dụng
+│       ├── about.html                  # Giới thiệu nền tảng
+│       ├── admin.html                  # Admin Dashboard
+│       ├── admin-login.html            # Đăng nhập Quản trị viên
+│       ├── cart.html                   # Giỏ hàng
+│       ├── checkout.html               # Thanh toán thường và VietQR mô phỏng
+│       ├── contact.html                # Liên hệ và Hỗ trợ
+│       ├── course-detail.html           # Chi tiết khóa học
+│       ├── courses.html                # Danh sách khóa học
+│       ├── login.html                  # Đăng nhập
+│       ├── my-courses.html             # Khóa học của tôi và Lịch sử đơn hàng
+│       ├── profile.html                # Hồ sơ cá nhân
+│       └── register.html               # Đăng ký tài khoản
 ├── setup/                              # Tập tin hướng dẫn cài đặt và dữ liệu thử nghiệm
 ├── soft/                               # Phần mềm liên quan (nếu có)
 └── docker/                             # Tập tin triển khai Docker (nếu có)
@@ -91,5 +94,5 @@ csn-da24ttc-hotheloc-webbankhoahoc-frontend/
    git clone https://github.com/holoc2021tv/csn-da24ttc-hotheloc-webbankhoahoc-frontend.git
    ```
 2. Mở thư mục dự án bằng **Visual Studio Code**.
-3. Cài đặt tiện ích mở rộng **Live Server**, nhấp chuột phải vào `src/index.html` và chọn **Open with Live Server**, hoặc mở trực tiếp tệp `src/index.html` bằng trình duyệt.
+3. Cài đặt tiện ích mở rộng **Live Server**, nhấp chuột phải vào `index.html` ở thư mục gốc và chọn **Open with Live Server**. Trang chủ mặc định dùng địa chỉ `http://127.0.0.1:5500`.
 4. Để làm mới toàn bộ dữ liệu mẫu về trạng thái mặc định 55 khóa học, mở **DevTools (F12) -> Application -> Local Storage**, xóa các khóa bắt đầu bằng `EDU_` rồi tải lại trang.

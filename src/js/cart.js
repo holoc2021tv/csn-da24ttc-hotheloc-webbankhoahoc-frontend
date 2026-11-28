@@ -17,14 +17,14 @@ function ganSuKienBangGioHang() {
             if (layGioHang().length === 0) {
                 return;
             }
-            if (confirm('Bạn có chắc chắn muốn xóa toàn bộ khóa học trong giỏ hàng?')) {
+            xacNhanHanhDongBootstrap('Xóa giỏ hàng', 'Bạn có chắc chắn muốn xóa toàn bộ khóa học trong giỏ hàng?', function() {
                 if (!xoaSachGioHang()) {
                     hienThiThongBao('Không thể xóa giỏ hàng trong LocalStorage.', 'danger');
                     return;
                 }
                 hienThiBangGioHang();
                 hienThiThongBao('Đã xóa toàn bộ giỏ hàng!', 'info');
-            }
+            });
         });
     }
 
@@ -118,13 +118,12 @@ function hienThiBangGioHang() {
 }
 
 function xuLyXoaKhoiGioHang(maKhoaHoc) {
-    var xacNhan = confirm('Bạn có chắc chắn muốn xóa khóa học này khỏi giỏ hàng?');
-    if (xacNhan) {
+    xacNhanHanhDongBootstrap('Xóa khóa học', 'Bạn có chắc chắn muốn xóa khóa học này khỏi giỏ hàng?', function() {
         if (!xoaKhoiGio(maKhoaHoc)) {
             hienThiThongBao('Không thể cập nhật giỏ hàng trong LocalStorage.', 'danger');
             return;
         }
         hienThiBangGioHang();
         hienThiThongBao('Đã xóa khóa học khỏi giỏ hàng!', 'info');
-    }
+    });
 }

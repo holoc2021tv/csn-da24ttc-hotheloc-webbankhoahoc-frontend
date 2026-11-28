@@ -1,21 +1,25 @@
 /**
  * FILE: src/js/login.js
- * NHIEM VU: Xu ly dang nhap co kiem tra Captcha, ho tro Ghi nho phien dang nhap,
- * tu dong loc khoa hoc da so huu khoi gio hang khi dang nhap va quen mat khau mo phong.
+ * NHIEM VU: Xu ly dang nhap danh rieng cho Hoc vien (chan tai khoan Admin), ho tro dang nhap
+ * nhieu tai khoan cung luc (?mode=add), Captcha va quen mat khau mo phong.
  */
 
 var maXacThucDangNhapHienTai = '';
 
+function laCheDoThemTaiKhoan() {
+    var thamSo = new URLSearchParams(window.location.search || '');
+    return thamSo.get('mode') === 'add';
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     var phienHienTai = layNguoiDungHienTai();
-    if (phienHienTai && phienHienTai.email) {
-        window.location.replace('index.html');
+    if (phienHienTai && phienHienTai.email && !laCheDoThemTaiKhoan()) {
+        window.location.replace(layDuongDanTrang('index.html'));
         return;
     }
     damBaoTaiKhoanQuanTri();
     taoMaXacThucDangNhap();
     ganSuKienBieuMauDangNhap();
-    ganSuKienAnHienMatKhau();
     ganSuKienQuenMatKhau();
 });
 
@@ -75,45 +79,49 @@ function ganSuKienBieuMauDangNhap() {
         var danhSachNguoiDung = ketQuaDoc.duLieu;
         var nguoiDungKhop = null;
         for (var i = 0; i < danhSachNguoiDung.length; i++) {
-            if (danhSachNguoiDung[i].email && danhSachNguoiDung[i].email.toLowerCase() === email.toLowerCase() && danhSachNguoiDung[i].password === matKhau) {
+            if (danhSachNguoiDung[i] && typeof danhSachNguoiDung[i].email === 'string' && danhSachNguoiDung[i].email.toLowerCase() === email.toLowerCase() && danhSachNguoiDung[i].password === matKhau) {
                 nguoiDungKhop = danhSachNguoiDung[i];
                 break;
             }
         }
 
         if (nguoiDungKhop) {
+            if (nguoiDungKhop.role === 'admin' || nguoiDungKhop.email.toLowerCase() === EMAIL_QUAN_TRI_MAC_DINH) {
+                hienThiThongBao('Email hoặc mật khẩu không chính xác! Vui lòng kiểm tra lại.', 'danger');
+                taoMaXacThucDangNhap();
+                return;
+            }
+
             if (nguoiDungKhop.status === 'locked') {
                 hienThiThongBao('Tài khoản này đang bị tạm khóa bởi Quản trị viên. Không thể đăng nhập.', 'danger');
                 taoMaXacThucDangNhap();
                 return;
             }
-            var laVaiTroQuanTri = (nguoiDungKhop.email === EMAIL_QUAN_TRI_MAC_DINH && nguoiDungKhop.role === 'admin');
+
             var nguoiDungHienTai = {
                 id: nguoiDungKhop.id,
                 fullName: nguoiDungKhop.fullName,
                 email: nguoiDungKhop.email,
                 phone: nguoiDungKhop.phone || '0372765126',
                 address: nguoiDungKhop.address || 'Trà Vinh, Việt Nam',
-                role: laVaiTroQuanTri ? 'admin' : 'student'
+                role: 'user',
+                createdAt: nguoiDungKhop.createdAt || '',
+                rememberSession: ghiNhoPhien
             };
 
-            nguoiDungHienTai.rememberSession = ghiNhoPhien;
-            if (!luuNguoiDungHienTai(nguoiDungHienTai)) {
+            if (!themHoacCapNhatPhienNguoiDung(nguoiDungHienTai)) {
                 hienThiThongBao('Không thể lưu phiên đăng nhập vào trình duyệt (bộ nhớ đầy hoặc bị chặn).', 'danger');
                 return;
             }
 
-            // Loc bo ngay cac khoa hoc da so huu khoi gio hang EDU_CART_ITEMS
             var soKhoaDaLoc = locBoKhoaHocDaSoHuuKhoiGio();
             var chuThichLoc = soKhoaDaLoc > 0 ? (' (Đã tự động bỏ ' + soKhoaDaLoc + ' khóa học bạn đã sở hữu khỏi giỏ hàng).') : '';
+            var tongSoPhien = layDanhSachPhienDangNhap().length;
+            var chuThichDaPhien = tongSoPhien > 1 ? (' Hiện đang đăng nhập song song ' + tongSoPhien + ' tài khoản học viên.') : '';
 
-            if (laVaiTroQuanTri) {
-                luuThongBaoChoChuyenTrang('Đăng nhập quyền Quản trị viên (Admin) thành công!' + chuThichLoc, 'success');
-                window.location.href = 'admin.html';
-            } else {
-                luuThongBaoChoChuyenTrang('Đăng nhập thành công! Chào mừng ' + nguoiDungKhop.fullName + ' quay lại.' + chuThichLoc, 'success');
-                window.location.href = 'index.html';
-            }
+            luuThongBaoChoChuyenTrang('Đăng nhập thành công! Chào mừng ' + nguoiDungKhop.fullName + ' quay lại.' + chuThichLoc + chuThichDaPhien, 'success');
+            var duongDanQuayLai = layVaXoaDuongDanQuayLai();
+            window.location.href = duongDanQuayLai ? duongDanQuayLai : layDuongDanTrang('index.html');
         } else {
             hienThiThongBao('Email hoặc mật khẩu không chính xác! Vui lòng kiểm tra lại.', 'danger');
             taoMaXacThucDangNhap();
@@ -183,7 +191,7 @@ function ganSuKienQuenMatKhau() {
         var danhSach = ketQuaDoc.duLieu.slice();
         var daTimThay = false;
         for (var i = 0; i < danhSach.length; i++) {
-            if (danhSach[i].email && danhSach[i].email.toLowerCase() === email) {
+            if (danhSach[i] && typeof danhSach[i].email === 'string' && danhSach[i].email.toLowerCase() === email && danhSach[i].role !== 'admin') {
                 danhSach[i].password = matKhauMoi;
                 daTimThay = true;
                 break;
@@ -191,7 +199,7 @@ function ganSuKienQuenMatKhau() {
         }
 
         if (!daTimThay) {
-            hienThiThongBao('Không tìm thấy tài khoản với email này!', 'danger');
+            hienThiThongBao('Không tìm thấy tài khoản học viên với email này!', 'danger');
             taoMaCaptchaQuenMatKhau();
             return;
         }
@@ -207,3 +215,10 @@ function ganSuKienQuenMatKhau() {
         hienThiThongBao('Đặt lại mật khẩu thành công (mô phỏng cục bộ trên trình duyệt)! Bạn có thể đăng nhập ngay.', 'success');
     });
 }
+
+document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        window.location.href = layDuongDanTrang('admin-login.html');
+    }
+});

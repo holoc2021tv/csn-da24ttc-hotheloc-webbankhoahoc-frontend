@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Quản Trị Hệ Thống (Admin Dashboard) - EduCourses</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" type="image/svg+xml" href="../assets/images/logo-chinh.svg">
+</head>
+<body class="admin-body">
+    <div class="admin-sidebar-backdrop" id="lop-phu-sidebar-quan-tri"></div>
+
+    <div class="admin-layout" id="khung-bo-cuc-quan-tri">
+        <!-- SIDEBAR BEN TRAI -->
+        <aside class="admin-sidebar" id="thanh-ben-quan-tri" aria-label="Menu điều hướng quản trị">
+            <a class="admin-sidebar-brand" href="../../index.html">
+                <img src="../assets/images/logo-chinh.svg" alt="EduCourses Logo" class="admin-sidebar-logo">
+                <div class="badge bg-warning text-dark fw-bold admin-brand-text">ADMIN</div>
+            </a>
+
+            <nav class="admin-sidebar-nav" id="menu-phan-he-quan-tri" aria-label="Các phân hệ quản trị">
+                <button type="button" class="admin-nav-btn active" data-phan-he="tong-quan" aria-current="page">
+                    <i class="bi bi-house-door-fill fs-5"></i>
+                    <div class="admin-nav-label">Tổng quan</div>
+                </button>
+                <button type="button" class="admin-nav-btn" data-phan-he="khoa-hoc">
+                    <i class="bi bi-book-half fs-5"></i>
+                    <div class="admin-nav-label">Khóa học</div>
+                </button>
+                <button type="button" class="admin-nav-btn" data-phan-he="don-hang">
+                    <i class="bi bi-cart-check-fill fs-5"></i>
+                    <div class="admin-nav-label">Đơn hàng</div>
+                    <small id="badge-sidebar-don-cho" class="badge bg-warning text-dark ms-auto d-none">0</small>
+                </button>
+                <button type="button" class="admin-nav-btn" data-phan-he="hoc-vien">
+                    <i class="bi bi-people-fill fs-5"></i>
+                    <div class="admin-nav-label">Học viên</div>
+                </button>
+                <button type="button" class="admin-nav-btn" data-phan-he="danh-muc">
+                    <i class="bi bi-grid-fill fs-5"></i>
+                    <div class="admin-nav-label">Danh mục</div>
+                </button>
+                <button type="button" class="admin-nav-btn" data-phan-he="ma-giam-gia">
+                    <i class="bi bi-ticket-perforated-fill fs-5"></i>
+                    <div class="admin-nav-label">Mã giảm giá</div>
+                </button>
+                <button type="button" class="admin-nav-btn" data-phan-he="danh-gia">
+                    <i class="bi bi-star-fill fs-5"></i>
+                    <div class="admin-nav-label">Đánh giá</div>
+                </button>
+                                <button type="button" class="admin-nav-btn" data-phan-he="xep-hang">
+                    <i class="bi bi-trophy-fill fs-5"></i>
+                    <div class="admin-nav-label">Xếp hạng &amp; Nổi bật</div>
+                </button>
+                <button type="button" class="admin-nav-btn" data-phan-he="lien-he">
+                    <i class="bi bi-envelope-fill fs-5"></i>
+                    <div class="admin-nav-label">Liên hệ</div>
+                    <small id="badge-sidebar-lien-he-moi" class="badge bg-danger ms-auto d-none">0</small>
+                </button>
+            </nav>
+
+            <div class="admin-sidebar-footer">
+                <button type="button" class="admin-nav-btn" id="nut-thu-gon-sidebar" aria-label="Thu gọn hoặc mở rộng menu">
+                    <i class="bi bi-chevron-double-left fs-5" id="bieu-tuong-thu-gon-sidebar"></i>
+                    <div class="admin-nav-label">Thu gọn menu</div>
+                </button>
+            </div>
+        </aside>
+
+        <!-- VUNG NOI DUNG CHINH -->
+        <div class="admin-main-wrapper">
+            <header class="admin-header">
+                <div class="admin-header-left">
+                    <button type="button" class="btn btn-outline-secondary btn-sm d-lg-none" id="nut-mo-menu-mobile" aria-label="Mở menu quản trị">
+                        <i class="bi bi-list fs-5"></i>
+                    </button>
+                    <nav aria-label="Breadcrumb">
+                        <ol class="breadcrumb mb-0 small fw-semibold">
+                            <li class="breadcrumb-item"><a href="../../index.html" class="text-decoration-none text-secondary"><i class="bi bi-house-door me-1"></i>Quản trị</a></li>
+                            <li class="breadcrumb-item active text-primary" id="breadcrumb-phan-he-hien-tai" aria-current="page">Tổng quan</li>
+                        </ol>
+                    </nav>
+                </div>
+
+                <div class="admin-header-right">
+                    <div class="dropdown">
+                        <button type="button" id="nut-chuong-thong-bao-admin" class="btn btn-light border position-relative btn-sm px-2 py-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Thông báo cần xử lý" title="Thông báo cần xử lý">
+                            <i class="bi bi-bell-fill fs-6 text-secondary"></i>
+                            <strong id="so-thong-bao-admin" class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle d-none">0</strong>
+                        </button>
+                        <ul id="danh-sach-chuong-thong-bao-admin" class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 menu-tai-khoan-rong">
+                            <li class="px-3 py-2 text-muted small">Không có thông báo mới.</li>
+                        </ul>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 border-start ps-3">
+                        <div class="text-end d-none d-sm-block">
+                            <div class="fw-bold small text-dark" id="ten-admin-header">Quản trị viên</div>
+                            <div class="text-muted small" id="email-admin-header">admin@gmail.com</div>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary btn-sm fw-semibold" id="nut-cai-dat-tai-khoan-admin" title="Cài đặt tài khoản Admin"><i class="bi bi-person-gear me-1"></i>Tài khoản</button>
+                        <button type="button" class="btn btn-outline-danger btn-sm fw-semibold" id="nut-dang-xuat-quan-tri">
+                            <i class="bi bi-box-arrow-right me-1"></i>Đăng xuất
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <main class="admin-content">
+                <!-- PHAN HE 1: TONG QUAN -->
+                <section id="panel-tong-quan" class="admin-panel">
+                    <div class="mb-3">
+                        <h1 class="h3 fw-bold mb-1">Tổng quan hệ thống</h1>
+                        <p class="text-muted small mb-0">Số liệu vận hành tính trực tiếp từ LocalStorage (mô phỏng front-end)</p>
+                    </div>
+
+                    <!-- BO LOC THOI GIAN -->
+                    <div class="admin-card p-3 mb-4">
+                        <div class="row g-2 align-items-end">
+                            <div class="col-md-3">
+                                <label for="loai-loc-thoi-gian" class="form-label small fw-semibold text-secondary mb-1">Chế độ lọc thời gian</label>
+                                <select id="loai-loc-thoi-gian" class="form-select form-select-sm">
+                                    <option value="ALL">Tất cả thời gian</option>
+                                    <option value="DAY">Lọc theo Ngày</option>
+                                    <option value="MONTH">Lọc theo Tháng</option>
+                                    <option value="YEAR">Lọc theo Năm</option>
+                                </select>
+                            </div>
+                            <div id="khung-chon-ngay-loc" class="col-md-3 d-none">
+                                <label for="o-chon-ngay-loc" class="form-label small fw-semibold text-secondary mb-1">Chọn Ngày</label>
+                                <input type="date" id="o-chon-ngay-loc" class="form-control form-control-sm">
+                            </div>
+                            <div id="khung-chon-thang-loc" class="col-md-2 d-none">
+                                <label for="o-chon-thang-loc" class="form-label small fw-semibold text-secondary mb-1">Chọn Tháng</label>
+                                <select id="o-chon-thang-loc" class="form-select form-select-sm">
+                                    <option value="01">Tháng 01</option>
+                                    <option value="02">Tháng 02</option>
+                                    <option value="03">Tháng 03</option>
+                                    <option value="04">Tháng 04</option>
+                                    <option value="05">Tháng 05</option>
+                                    <option value="06">Tháng 06</option>
+                                    <option value="07">Tháng 07</option>
+                                    <option value="08">Tháng 08</option>
+                                    <option value="09">Tháng 09</option>
+                                    <option value="10">Tháng 10</option>
+                                    <option value="11">Tháng 11</option>
+                                    <option value="12">Tháng 12</option>
+                                </select>
+                            </div>
+                            <div id="khung-chon-nam-loc" class="col-md-2 d-none">
+                                <label for="o-chon-nam-loc" class="form-label small fw-semibold text-secondary mb-1">Chọn Năm</label>
+                                <select id="o-chon-nam-loc" class="form-select form-select-sm">
+                                    <option value="2024">Năm 2024</option>
+                                    <option value="2025">Năm 2025</option>
+                                    <option value="2026" selected>Năm 2026</option>
+                                    <option value="2027">Năm 2027</option>
+                                </select>
+                            </div>
+                            <div class="col-md-auto d-flex flex-wrap gap-2">
+                                <button type="button" id="nut-loc-hom-nay-thoi-gian-thuc" class="btn btn-outline-success btn-sm fw-semibold">
+                                    <i class="bi bi-clock-history me-1"></i>Hôm nay
+                                </button>
+                                <button type="button" id="nut-ap-dung-bo-loc-thong-ke" class="btn btn-primary btn-sm fw-semibold">
+                                    <i class="bi bi-funnel-fill me-1"></i>Áp dụng
+                                </button>
+                                <button type="button" id="nut-dat-lai-bo-loc-thong-ke" class="btn btn-outline-secondary btn-sm">
+                                    Đặt lại
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4 KPI CHINH -->
+                    <div class="admin-kpi-grid-v2 mb-3">
+                        <article class="admin-card admin-kpi-card kpi-sac-teal">
+                            <div class="admin-kpi-icon admin-kpi-icon-blue"><i class="bi bi-cash-coin"></i></div>
+                            <div>
+                                <div class="kpi-nhan-tren small fw-semibold">Doanh thu mô phỏng</div>
+                                <h4 id="thong-ke-tong-doanh-thu" class="fw-bold text-dark mb-0">0đ</h4>
+                                <small id="thong-ke-doanh-thu-phu" class="text-success fw-semibold">Đơn hàng hợp lệ</small>
+                            </div>
+                        </article>
+
+                        <article class="admin-card admin-kpi-card kpi-sac-indigo">
+                            <div class="admin-kpi-icon admin-kpi-icon-green"><i class="bi bi-mortarboard-fill"></i></div>
+                            <div>
+                                <div class="kpi-nhan-tren small fw-semibold">Tổng khóa học</div>
+                                <h4 id="thong-ke-tong-khoa-hoc" class="fw-bold text-dark mb-0">0</h4>
+                                <small id="thong-ke-khoa-hoc-phu" class="text-secondary">0 mở bán · 0 tạm ẩn</small>
+                            </div>
+                        </article>
+
+                        <article class="admin-card admin-kpi-card kpi-sac-emerald">
+                            <div class="admin-kpi-icon admin-kpi-icon-orange"><i class="bi bi-bag-check-fill"></i></div>
+                            <div>
+                                <div class="kpi-nhan-tren small fw-semibold">Tổng đơn hàng</div>
+                                <h4 id="thong-ke-tong-don-hang" class="fw-bold text-dark mb-0">0</h4>
+                                <small id="thong-ke-don-hang-phu" class="text-secondary">0 kích hoạt · 0 đã hủy</small>
+                            </div>
+                        </article>
+
+                        <article class="admin-card admin-kpi-card kpi-sac-rose">
+                            <div class="admin-kpi-icon admin-kpi-icon-purple"><i class="bi bi-people-fill"></i></div>
+                            <div>
+                                <div class="kpi-nhan-tren small fw-semibold">Học viên</div>
+                                <h4 id="thong-ke-tong-nguoi-dung" class="fw-bold text-dark mb-0">0</h4>
+                                <small id="thong-ke-nguoi-dung-phu" class="text-secondary">0 hoạt động · 0 bị khóa</small>
+                            </div>
+                        </article>
+                    </div>
+
+                    <!-- LUOI 2x2: 4 BIEU DO TRUC QUAN TU DU LIEU THUC -->
+                    <div class="admin-chart-grid-2x2 mb-4">
+                        <article class="admin-card p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="fw-bold mb-0"><i class="bi bi-bar-chart-fill text-info me-2"></i>Top 10 khóa học lượt xem cao nhất</h5>
+                                <small class="text-muted">Thanh ngang trực quan</small>
+                            </div>
+                            <div id="bieu-do-top10-luot-xem"></div>
+                        </article>
+
+                        <article class="admin-card p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="fw-bold mb-0"><i class="bi bi-graph-up text-primary me-2"></i>Doanh thu mô phỏng theo thời gian</h5>
+                                <small class="text-muted">Tính từ đơn hợp lệ</small>
+                            </div>
+                            <div id="bieu-do-doanh-thu-thoi-gian"></div>
+                        </article>
+
+                        <article class="admin-card p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="fw-bold mb-0"><i class="bi bi-pie-chart-fill text-primary me-2"></i>Đơn hàng theo trạng thái</h5>
+                                <small class="text-muted">Dữ liệu thực tế</small>
+                            </div>
+                            <div id="bieu-do-trang-thai-don-hang"></div>
+                        </article>
+
+                        <article class="admin-card p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="fw-bold mb-0"><i class="bi bi-columns-gap text-warning me-2"></i>Số lượng khóa học theo danh mục</h5>
+                                <small class="text-muted">Phân bố chuyên ngành</small>
+                            </div>
+                            <div id="bieu-do-khoa-hoc-theo-danh-muc"></div>
+                        </article>
+                    </div>
+
+                    <!-- DON HANG MOI NHAT -->
+                    <article class="admin-card p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold mb-0"><i class="bi bi-receipt text-primary me-2"></i>Đơn hàng mới nhất</h5>
+                            <button type="button" class="btn btn-outline-primary btn-sm nut-chuyen-phan-he" data-phan-he="don-hang">Xem tất cả</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Mã đơn</th>
+                                        <th>Học viên</th>
+                                        <th>Ngày đặt</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Trạng thái</th>
+                                        <th class="text-end">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bang-don-hang-gan-day"></tbody>
+                            </table>
+                        </div>
+                    </article>
+                </section>
+
+                <!-- PHAN HE 2: QUAN LY KHOA HOC -->
+                <section id="panel-khoa-hoc" class="admin-panel d-none">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                        <div>
+                            <h3 class="fw-bold mb-1">Quản lý Khóa học</h3>
+                            <p class="text-muted small mb-0">Thêm, sửa, ẩn/mở bán khóa học (tự động đồng bộ sang trang người dùng)</p>
+                        </div>
+                        <button type="button" class="btn btn-primary fw-bold" id="nut-mo-them-khoa-hoc">
+                            <i class="bi bi-plus-lg me-1"></i>Thêm khóa học mới
+                        </button>
+                    </div>
+
+                    <div class="admin-card p-4">
+                        <div class="row g-2 mb-3">
+                            <div class="col-md-4">
+                                <input type="text" id="o-tim-khoa-hoc-quan-tri" class="form-control form-control-sm" placeholder="Tìm theo mã, tên, danh mục, giảng viên...">
+                            </div>
+                            <div class="col-md-3">
+                                <select id="loc-danh-muc-khoa-hoc-admin" class="form-select form-select-sm">
+                                    <option value="ALL">Tất cả danh mục</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <select id="loc-trinh-do-khoa-hoc-admin" class="form-select form-select-sm">
+                                    <option value="ALL">Tất cả cấp độ</option>
+                                    <option value="Cơ bản">Cơ bản</option>
+                                    <option value="Trung cấp">Trung cấp</option>
+                                    <option value="Nâng cao">Nâng cao</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select id="loc-trang-thai-khoa-hoc-admin" class="form-select form-select-sm">
+                                    <option value="ALL">Tất cả trạng thái</option>
+                                    <option value="published">Đang công khai (Published)</option>
+                                    <option value="draft">Bản nháp (Draft)</option>
+                                    <option value="hidden">Đã ẩn (Hidden)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Mã KH</th>
+                                        <th>Khóa học</th>
+                                        <th>Danh mục &amp; Cấp độ</th>
+                                        <th>Học phí</th>
+                                        <th class="text-center">Chỉ số</th>
+                                        <th class="text-center">Trạng thái</th>
+                                        <th class="text-end">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bang-quan-ly-khoa-hoc"></tbody>
+                            </table>
+                        </div>
+                        <nav aria-label="Phân trang khóa học quản trị" class="mt-3"><ul id="phan-trang-khoa-hoc-admin" class="pagination pagination-sm justify-content-end mb-0"></ul></nav>
+                    </div>
+                </section>
+
+                <!-- PHAN HE 3: QUAN LY DON HANG -->
+                <section id="panel-don-hang" class="admin-panel d-none">
+                    <div class="mb-3">
+                        <h3 class="fw-bold mb-1">Quản lý Đơn hàng &amp; Quyền học</h3>
+                        <p class="text-muted small mb-0">Hủy hoặc kích hoạt lại đơn hàng mô phỏng, tự động đồng bộ quyền học và lượt mua</p>
+                    </div>
+
+                    <div class="admin-card p-4">
+                        <div class="row g-2 mb-3">
+                            <div class="col-md-5">
+                                <input type="text" id="o-tim-don-hang-quan-tri" class="form-control form-control-sm" placeholder="Tìm theo mã đơn, tên hoặc email học viên...">
+                            </div>
+                            <div class="col-md-3">
+                                <select id="loc-trang-thai-don-hang-admin" class="form-select form-select-sm">
+                                    <option value="ALL">Tất cả trạng thái</option>
+                                    <option value="paid_simulated">Đã thanh toán – Đã kích hoạt</option>
+                                    <option value="pending">Chờ xử lý (Pending)</option>
+                                    <option value="cancelled">Đã hủy (Cancelled)</option>
+                                    <option value="refunded">Đã hoàn tiền (Refunded)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Mã ĐH</th>
+                                        <th>Khách hàng</th>
+                                        <th>Khóa học</th>
+                                        <th>Thanh toán</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Trạng thái</th>
+                                        <th class="text-end">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bang-quan-ly-don-hang"></tbody>
+                            </table>
+                        </div>
+                        <nav aria-label="Phân trang đơn hàng quản trị" class="mt-3"><ul id="phan-trang-don-hang-admin" class="pagination pagination-sm justify-content-end mb-0"></ul></nav>
+                    </div>
+                </section>
+
+                <!-- PHAN HE 4: QUAN LY HOC VIEN -->
+                <section id="panel-hoc-vien" class="admin-panel d-none">
+                    <div class="mb-3">
+                        <h3 class="fw-bold mb-1">Quản lý Học viên &amp; Tài khoản</h3>
+                        <p class="text-muted small mb-0">Xem hồ sơ, khóa học đã sở hữu và khóa/mở khóa tài khoản (không hiển thị mật khẩu)</p>
+                    </div>
+
+                    <div class="admin-card p-4">
+                        <div class="row g-2 mb-3">
+                            <div class="col-md-5">
+                                <input type="text" id="o-tim-nguoi-dung-quan-tri" class="form-control form-control-sm" placeholder="Tìm theo tên, email hoặc số điện thoại...">
+                            </div>
+                            <div class="col-md-3">
+                                <select id="loc-vai-tro-nguoi-dung-admin" class="form-select form-select-sm">
+                                    <option value="ALL">Tất cả vai trò</option>
+                                    <option value="user">Học viên (User)</option>
+                                    <option value="admin">Quản trị viên</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select id="loc-trang-thai-nguoi-dung-admin" class="form-select form-select-sm">
+                                    <option value="ALL">Tất cả trạng thái</option>
+                                    <option value="active">Đang hoạt động</option>
+                                    <option value="locked">Đang bị khóa</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Mã User</th>
+                                        <th>Họ và tên</th>
+                                        <th>Email &amp; SĐT</th>
+                                        <th>Vai trò</th>
+                                        <th>Trạng thái</th>
+                                        <th class="text-end">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bang-quan-ly-nguoi-dung"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHAN HE 5: QUAN LY DANH MUC -->
+                <section id="panel-danh-muc" class="admin-panel d-none">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                        <div>
+                            <h3 class="fw-bold mb-1">Quản lý Danh mục</h3>
+                            <p class="text-muted small mb-0">Quản lý nhóm chuyên ngành (EDU_CATEGORIES) và đồng bộ tên danh mục sang khóa học</p>
+                        </div>
+                        <button type="button" class="btn btn-primary fw-bold" id="nut-mo-them-danh-muc">
+                            <i class="bi bi-plus-lg me-1"></i>Thêm danh mục
+                        </button>
+                    </div>
+
+                    <div class="admin-card p-4">
+                        <div class="row g-2 mb-3">
+                            <div class="col-md-5">
+                                <input type="text" id="o-tim-danh-muc-quan-tri" class="form-control form-control-sm" placeholder="Tìm theo tên hoặc slug danh mục...">
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Mã DM</th>
+                                        <th>Tên danh mục</th>
+                                        <th>Slug</th>
+                                        <th class="text-center">Số khóa học</th>
+                                        <th class="text-center">Trạng thái</th>
+                                        <th class="text-end">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bang-quan-ly-danh-muc"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHAN HE 6: QUAN LY MA GIAM GIA -->
+                <section id="panel-ma-giam-gia" class="admin-panel d-none">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                        <div>
+                            <h3 class="fw-bold mb-1">Quản lý Mã giảm giá (Voucher)</h3>
+                            <p class="text-muted small mb-0">Quản lý mã ưu đãi dùng chung với trang Thanh toán (EDU_COUPONS)</p>
+                        </div>
+                        <button type="button" class="btn btn-primary fw-bold" id="nut-mo-them-ma-giam-gia">
+                            <i class="bi bi-plus-lg me-1"></i>Tạo mã giảm giá
+                        </button>
+                    </div>
+
+                    <div class="admin-card p-4">
+                        <div class="row g-2 mb-3">
+                            <div class="col-md-4">
+                                <input type="text" id="o-tim-ma-giam-gia-quan-tri" class="form-control form-control-sm" placeholder="Tìm theo mã voucher...">
+                            </div>
+                            <div class="col-md-3">
+                                <select id="loc-trang-thai-voucher-admin" class="form-select form-select-sm">
+                                    <option value="ALL">Tất cả trạng thái</option>
+                                    <option value="ACTIVE">Đang hoạt động</option>
+                                    <option value="INACTIVE">Đang tắt</option>
+                                    <option value="EXPIRED">Đã hết hạn</option>
+                                    <option value="EXHAUSTED">Hết lượt dùng</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Mã Voucher</th>
+                                        <th>Mức giảm</th>
+                                        <th>Đơn tối thiểu</th>
+                                        <th class="text-center">Lượt dùng</th>
+                                        <th>Hạn sử dụng</th>
+                                        <th class="text-center">Trạng thái</th>
+                                        <th class="text-end">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bang-quan-ly-ma-giam-gia"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHAN HE 7: QUAN LY DANH GIA -->
+                <section id="panel-danh-gia" class="admin-panel d-none">
+                    <div class="mb-3">
+                        <h3 class="fw-bold mb-1">Quản lý Đánh giá sao</h3>
+                        <p class="text-muted small mb-0">Kiểm duyệt đánh giá học viên từ EDU_REVIEWS và tự động tính lại điểm trung bình</p>
+                    </div>
+
+                    <div class="admin-card p-4">
+                        <div class="row g-2 mb-3">
+                            <div class="col-md-5">
+                                <input type="text" id="o-tim-danh-gia-quan-tri" class="form-control form-control-sm" placeholder="Tìm theo mã khóa học, người đánh giá hoặc nội dung...">
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Mã KH</th>
+                                        <th>Khóa học</th>
+                                        <th>Người đánh giá</th>
+                                        <th>Số sao</th>
+                                        <th>Nội dung</th>
+                                        <th class="text-end">Xóa</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bang-quan-ly-danh-gia"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- PHAN HE 9: XEP HANG & KHOA HOC NOI BAT (THANG 100 & 30 NGAY) -->
+                <section id="panel-xep-hang" class="admin-panel d-none">
+                    <div class="mb-4">
+                        <h3 class="fw-bold text-dark mb-1">Cấu Hình Xếp Hạng &amp; Khóa Học Nổi Bật</h3>
+                        <p class="text-muted small mb-0">Điểm Nổi Bật (thang 100) và Điểm Quan Tâm (30 ngày) được tính động trực tiếp từ dữ liệu thực tế trong LocalStorage.</p>
+                    </div>
+
+                    <div class="card border-0 shadow-sm rounded-4 mb-4">
+                        <div class="card-body p-4">
+                            <form id="bieu-mau-cau-hinh-noi-bat" class="row g-3 align-items-end">
+                                <div class="col-md-4">
+                                    <label for="chon-che-do-noi-bat" class="form-label fw-semibold small">Chế độ lựa chọn Nổi bật</label>
+                                    <select id="chon-che-do-noi-bat" class="form-select">
+                                        <option value="hybrid">Kết hợp (Hybrid – Ghim + Tự động)</option>
+                                        <option value="automatic">Tự động (Automatic – Theo điểm 100)</option>
+                                        <option value="manual">Thủ công (Manual – Chỉ khóa đã ghim)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="nhap-so-luong-noi-bat-toi-da" class="form-label fw-semibold small">Số thẻ tối đa (1–12)</label>
+                                    <input type="number" id="nhap-so-luong-noi-bat-toi-da" class="form-control" min="1" max="12" value="6" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="nhap-nguong-diem-tu-dong" class="form-label fw-semibold small">Ngưỡng điểm tối thiểu (0–100)</label>
+                                    <input type="number" id="nhap-nguong-diem-tu-dong" class="form-control" min="0" max="100" value="50" required>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary fw-semibold w-100">
+                                        <i class="bi bi-save me-1"></i>Lưu cấu hình
+                                    </button>
+                                </div>
+                            </form>
+                            <div class="mt-3 small text-muted" id="tom-tat-ghim-loai-tru-admin">Đang ghim: 0 khóa • Đang loại trừ: 0 khóa</div>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 shadow-sm rounded-4">
+                        <div class="card-body p-4">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Khóa học</th>
+                                            <th>Trạng thái</th>
+                                            <th>Điểm Nổi Bật (100đ)</th>
+                                            <th>ĐK / ĐG / Xem</th>
+                                            <th>Quan tâm 30 ngày</th>
+                                            <th class="text-end">Ghim &amp; Loại trừ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bang-xep-hang-noi-bat-admin"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHAN HE 8: QUAN LY LIEN HE -->
+                <section id="panel-lien-he" class="admin-panel d-none">
+                    <div class="mb-3">
+                        <h3 class="fw-bold mb-1">Quản lý Liên hệ khách hàng</h3>
+                        <p class="text-muted small mb-0">Tin nhắn lưu cục bộ trên trình duyệt (EDU_CONTACTS – mô phỏng front-end)</p>
+                    </div>
+
+                    <div class="admin-card p-4">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Mã LH</th>
+                                        <th>Người gửi</th>
+                                        <th>Tiêu đề &amp; Nội dung</th>
+                                        <th>Trạng thái xử lý</th>
+                                        <th class="text-end">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bang-quan-ly-lien-he"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- MODAL THEM / SUA KHOA HOC -->
+    <div class="modal fade" id="hop-thoai-khoa-hoc" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title fw-bold" id="tieu-de-hop-thoai-khoa-hoc">Thêm Khóa Học Mới</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <form id="bieu-mau-khoa-hoc-quan-tri">
+                    <div class="modal-body p-4">
+                        <input type="hidden" id="che-do-sua-khoa-hoc" value="ADD">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label for="nhap-ma-khoa-hoc" class="form-label fw-semibold">Mã khóa học *</label>
+                                <input type="text" class="form-control" id="nhap-ma-khoa-hoc" placeholder="VD: KH56" required>
+                            </div>
+                            <div class="col-md-8">
+                                <label for="nhap-ten-khoa-hoc" class="form-label fw-semibold">Tên khóa học (5–150 ký tự) *</label>
+                                <input type="text" class="form-control" id="nhap-ten-khoa-hoc" placeholder="Nhập tên khóa học" required>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-4">
+                                <label for="nhap-danh-muc-khoa-hoc" class="form-label fw-semibold">Danh mục *</label>
+                                <select id="nhap-danh-muc-khoa-hoc" class="form-select"></select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="nhap-trinh-do-khoa-hoc" class="form-label fw-semibold">Cấp độ</label>
+                                <select id="nhap-trinh-do-khoa-hoc" class="form-select">
+                                    <option value="Cơ bản">Cơ bản</option>
+                                    <option value="Trung cấp">Trung cấp</option>
+                                    <option value="Nâng cao">Nâng cao</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="nhap-trang-thai-khoa-hoc" class="form-label fw-semibold">Trạng thái bán</label>
+                                <select id="nhap-trang-thai-khoa-hoc" class="form-select">
+                                    <option value="published">Đang công khai (Published)</option>
+                                    <option value="draft">Bản nháp (Draft)</option>
+                                    <option value="hidden">Đã ẩn (Hidden)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="nhap-giang-vien-khoa-hoc" class="form-label fw-semibold">Giảng viên *</label>
+                                <input type="text" class="form-control" id="nhap-giang-vien-khoa-hoc" placeholder="VD: ThS. Phạm Minh Đương" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="nhap-thoi-luong-khoa-hoc" class="form-label fw-semibold">Thời lượng</label>
+                                <input type="text" class="form-control" id="nhap-thoi-luong-khoa-hoc" placeholder="VD: 12 giờ học">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="nhap-so-bai-hoc-khoa-hoc" class="form-label fw-semibold">Số bài học</label>
+                                <input type="number" class="form-control" id="nhap-so-bai-hoc-khoa-hoc" min="1" value="20">
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="nhap-gia-goc-khoa-hoc" class="form-label fw-semibold">Giá gốc (VNĐ)</label>
+                                <input type="number" class="form-control" id="nhap-gia-goc-khoa-hoc" min="0" value="600000" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="nhap-gia-ban-khoa-hoc" class="form-label fw-semibold">Giá bán (VNĐ) *</label>
+                                <input type="number" class="form-control" id="nhap-gia-ban-khoa-hoc" min="0" value="299000" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="nhap-anh-khoa-hoc" class="form-label fw-semibold">Đường dẫn ảnh bìa (URL) *</label>
+                            <input type="text" class="form-control" id="nhap-anh-khoa-hoc" placeholder="https://images.unsplash.com/..." required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="nhap-mo-ta-khoa-hoc" class="form-label fw-semibold">Mô tả tóm tắt</label>
+                            <textarea class="form-control" id="nhap-mo-ta-khoa-hoc" rows="3" required></textarea>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="chon-khoa-hoc-noi-bat" checked>
+                            <label class="form-check-label fw-semibold" for="chon-khoa-hoc-noi-bat">Hiển thị ở mục Khóa học nổi bật trên Trang chủ</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
+                        <button type="submit" class="btn btn-primary fw-bold">Lưu khóa học</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CHI TIET DON HANG -->
+    <div class="modal fade" id="hop-thoai-chi-tiet-don-hang" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title fw-bold" id="tieu-de-chi-tiet-don-hang">Chi tiết đơn hàng</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body p-4" id="noi-dung-chi-tiet-don-hang"></div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CHI TIET HOC VIEN -->
+    <div class="modal fade" id="hop-thoai-chi-tiet-hoc-vien" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title fw-bold" id="tieu-de-chi-tiet-hoc-vien">Hồ sơ học viên</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body p-4" id="noi-dung-chi-tiet-hoc-vien"></div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL THEM / SUA DANH MUC -->
+    <div class="modal fade" id="hop-thoai-danh-muc" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title fw-bold" id="tieu-de-hop-thoai-danh-muc">Thêm danh mục mới</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <form id="bieu-mau-danh-muc-quan-tri">
+                    <div class="modal-body p-4">
+                        <input type="hidden" id="che-do-sua-danh-muc" value="ADD">
+                        <input type="hidden" id="ma-danh-muc-dang-sua" value="">
+                        <div class="mb-3">
+                            <label for="nhap-ten-danh-muc" class="form-label fw-semibold">Tên danh mục *</label>
+                            <input type="text" class="form-control" id="nhap-ten-danh-muc" placeholder="VD: Trí tuệ nhân tạo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nhap-mo-ta-danh-muc" class="form-label fw-semibold">Mô tả ngắn</label>
+                            <textarea class="form-control" id="nhap-mo-ta-danh-muc" rows="2"></textarea>
+                        </div>
+                        <div class="mb-2">
+                            <label for="nhap-trang-thai-danh-muc" class="form-label fw-semibold">Trạng thái</label>
+                            <select id="nhap-trang-thai-danh-muc" class="form-select">
+                                <option value="active">Đang hiển thị</option>
+                                <option value="hidden">Tạm ẩn</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary fw-bold">Lưu danh mục</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL THEM / SUA MA GIAM GIA -->
+    <div class="modal fade" id="hop-thoai-ma-giam-gia" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title fw-bold" id="tieu-de-hop-thoai-ma-giam-gia">Tạo mã giảm giá</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <form id="bieu-mau-ma-giam-gia-quan-tri">
+                    <div class="modal-body p-4">
+                        <input type="hidden" id="che-do-sua-voucher" value="ADD">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="nhap-ma-voucher" class="form-label fw-semibold">Mã voucher (chữ hoa) *</label>
+                                <input type="text" class="form-control" id="nhap-ma-voucher" placeholder="VD: SUMMER20" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="nhap-loai-giam-voucher" class="form-label fw-semibold">Loại giảm</label>
+                                <select id="nhap-loai-giam-voucher" class="form-select">
+                                    <option value="percent">Theo phần trăm (%)</option>
+                                    <option value="fixed">Số tiền cố định (VNĐ)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="nhap-gia-tri-voucher" class="form-label fw-semibold">Giá trị giảm *</label>
+                                <input type="number" class="form-control" id="nhap-gia-tri-voucher" min="1" value="10" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="nhap-don-toi-thieu-voucher" class="form-label fw-semibold">Đơn tối thiểu (VNĐ)</label>
+                                <input type="number" class="form-control" id="nhap-don-toi-thieu-voucher" min="0" value="0">
+                            </div>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label for="nhap-gioi-han-luot-voucher" class="form-label fw-semibold">Giới hạn lượt (0 = không giới hạn)</label>
+                                <input type="number" class="form-control" id="nhap-gioi-han-luot-voucher" min="0" value="0">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="nhap-han-su-dung-voucher" class="form-label fw-semibold">Hạn sử dụng (tùy chọn)</label>
+                                <input type="date" class="form-control" id="nhap-han-su-dung-voucher">
+                            </div>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="chon-kich-hoat-voucher" checked>
+                            <label class="form-check-label fw-semibold" for="chon-kich-hoat-voucher">Đang hoạt động</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary fw-bold">Lưu mã giảm giá</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="hop-thoai-tai-khoan-admin" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <form id="bieu-mau-tai-khoan-admin">
+                    <div class="modal-header bg-dark text-white">
+                        <h5 class="modal-title fw-bold"><i class="bi bi-person-gear me-2 text-warning"></i>Thông Tin Tài Khoản Quản Trị</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label for="admin-ho-ten-ca-nhan" class="form-label fw-semibold">Họ và tên *</label>
+                            <input type="text" class="form-control" id="admin-ho-ten-ca-nhan" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="admin-email-ca-nhan" class="form-label fw-semibold">Email Quản trị</label>
+                            <input type="email" class="form-control bg-light" id="admin-email-ca-nhan" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="admin-sdt-ca-nhan" class="form-label fw-semibold">Số điện thoại</label>
+                            <input type="tel" class="form-control" id="admin-sdt-ca-nhan" minlength="10" maxlength="10">
+                        </div>
+                        <div class="mb-0">
+                            <label for="admin-mat-khau-moi" class="form-label fw-semibold">Mật khẩu mới (bỏ trống nếu giữ nguyên)</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="admin-mat-khau-moi" minlength="6" placeholder="Tối thiểu 6 ký tự">
+                                <button type="button" class="btn btn-outline-secondary nut-hien-mat-khau" data-o-nhap-muc-tieu="admin-mat-khau-moi" aria-label="Hiện mật khẩu" aria-pressed="false" title="Hiện mật khẩu"><i class="bi bi-eye"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary fw-bold">Lưu thông tin</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/storage.js"></script>
+    <script src="../js/data.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/admin.js"></script>
+</body>
+</html>

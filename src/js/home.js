@@ -1,18 +1,39 @@
 /**
  * FILE: src/js/home.js
- * NHIEM VU: Hien thi Danh muc, Khoa hoc noi bat, Ban chay, Moi ra mat,
- * Yeu thich va Da xem gan day tren Trang chu su dung ham dung chung taoMaHTMLTheKhoaHoc().
+ * NHIEM VU: Hien thi Danh muc san pham, Khoa hoc Noi bat, Khuyen mai, Moi ra mat,
+ * Yeu thich va Da xem gan day tren Trang chu.
  */
 
 document.addEventListener('DOMContentLoaded', function() {
     capNhatHuyHieuGioHang();
     hienThiDanhMucNoiBat();
-    hienThiKhuVucKhoaHoc('vung-khoa-hoc-noi-bat', layKhoaHocNoiBat().slice(0, 4));
-    hienThiKhuVucKhoaHoc('vung-khoa-hoc-ban-chay', layKhoaHocBanChay().slice(0, 4));
+    hienThiKhoaHocQuanTamNhat30Ngay();
+    hienThiKhoaHocNoiBatTheoCauHinh();
+    hienThiKhuVucKhoaHoc('vung-khoa-hoc-ban-chay', layKhoaHocKhuyenMai().slice(0, 4));
     hienThiKhuVucKhoaHoc('vung-khoa-hoc-moi', layKhoaHocMoi().slice(0, 4));
     hienThiKhuVucCaNhanHoa();
     ganSuKienTrangChu();
 });
+
+function layKhoaHocKhuyenMai() {
+    var tatCa = layTatCaKhoaHoc();
+    var danhSachGiamGia = [];
+    for (var i = 0; i < tatCa.length; i++) {
+        var kh = tatCa[i];
+        if (!kiemTraKhoaHocDangMo(kh)) continue;
+        var goc = Number(kh.originalPrice || 0);
+        var ban = Number(kh.salePrice || 0);
+        if (goc > ban && goc > 0 && ban > 0) {
+            danhSachGiamGia.push(kh);
+        }
+    }
+    danhSachGiamGia.sort(function(a, b) {
+        var ptA = (Number(a.originalPrice) - Number(a.salePrice)) / Number(a.originalPrice);
+        var ptB = (Number(b.originalPrice) - Number(b.salePrice)) / Number(b.originalPrice);
+        return ptB - ptA;
+    });
+    return danhSachGiamGia;
+}
 
 function ganSuKienTrangChu() {
     var phanNoiDungChinh = document.querySelector('main');
@@ -26,6 +47,7 @@ function ganSuKienTrangChu() {
             var maKhoaHoc = nutYeuThich.getAttribute('data-ma-khoa-hoc');
             if (maKhoaHoc) {
                 xuLyNutYeuThichChung(maKhoaHoc, nutYeuThich);
+                hienThiKhoaHocQuanTamNhat30Ngay();
                 hienThiKhuVucCaNhanHoa();
             }
             return;
@@ -62,7 +84,8 @@ function hienThiDanhMucNoiBat() {
         'JavaScript': 'bi-filetype-js text-warning',
         'Database': 'bi-database-check text-success',
         'Công cụ': 'bi-git text-danger',
-        'Phân tích hệ thống': 'bi-diagram-3-fill text-info'
+        'Phân tích hệ thống': 'bi-diagram-3-fill text-info',
+        'Kỹ năng mềm': 'bi-people-fill text-secondary'
     };
 
     var maHTML = '';
@@ -71,7 +94,7 @@ function hienThiDanhMucNoiBat() {
         var lopBieuTuong = bangBieuTuong[muc.category] || 'bi-journal-bookmark text-primary';
 
         maHTML += '<article class="card border p-3 text-center the-danh-muc shadow-sm">';
-        maHTML += '  <a href="courses.html?category=' + encodeURIComponent(muc.category) + '" class="text-decoration-none text-dark w-100">';
+        maHTML += '  <a href="' + layDuongDanTrang('courses.html?category=' + encodeURIComponent(muc.category)) + '" class="text-decoration-none text-dark w-100">';
         maHTML += '    <i class="bi ' + lopBieuTuong + ' fs-2 mb-2 d-block"></i>';
         maHTML += '    <h6 class="fw-bold mb-1">' + maHoaHTML(muc.category) + '</h6>';
         maHTML += '    <small class="text-muted d-block">' + Number(muc.count || 0) + ' khóa học</small>';
@@ -104,17 +127,16 @@ function hienThiKhuVucKhoaHoc(maKhungChua, danhSachKhoaHoc) {
     khungChua.innerHTML = maHTML;
 }
 
-
 function xuLyThemGioHangTrangChu(maKhoaHoc) {
     tangLuotClickKhoaHoc(maKhoaHoc);
     var ketQua = themVaoGio(maKhoaHoc, 1);
     hienThiThongBao(ketQua.message, ketQua.success ? 'success' : 'warning');
     hienThiDanhMucNoiBat();
-    hienThiKhuVucKhoaHoc('vung-khoa-hoc-noi-bat', layKhoaHocNoiBat().slice(0, 4));
-    hienThiKhuVucKhoaHoc('vung-khoa-hoc-ban-chay', layKhoaHocBanChay().slice(0, 4));
+    hienThiKhoaHocQuanTamNhat30Ngay();
+    hienThiKhoaHocNoiBatTheoCauHinh();
+    hienThiKhuVucKhoaHoc('vung-khoa-hoc-ban-chay', layKhoaHocKhuyenMai().slice(0, 4));
     hienThiKhuVucKhoaHoc('vung-khoa-hoc-moi', layKhoaHocMoi().slice(0, 4));
 }
-
 
 function hienThiKhuVucCaNhanHoa() {
     var khuVucCaNhan = document.getElementById('khu-vuc-ca-nhan-hoa');
@@ -148,7 +170,7 @@ function hienThiKhuVucCaNhanHoa() {
             maHTMLYeuThich += '  <div class="d-flex align-items-center gap-2">';
             maHTMLYeuThich += '    <img src="' + maHoaHTML(anhThich) + '" alt="' + maHoaHTML(khoaHocThich.title) + '" class="rounded anh-san-pham-thanh-toan">';
             maHTMLYeuThich += '    <div class="overflow-hidden">';
-            maHTMLYeuThich += '      <a href="course-detail.html?id=' + maUrlThich + '" class="fw-bold text-dark text-decoration-none d-block text-truncate lien-ket-dem-click-trang-chu" data-ma-khoa-hoc="' + maHoaHTML(khoaHocThich.id) + '">' + maHoaHTML(khoaHocThich.title) + '</a>';
+            maHTMLYeuThich += '      <a href="' + layDuongDanTrang('course-detail.html?id=' + maUrlThich) + '" class="fw-bold text-dark text-decoration-none d-block text-truncate lien-ket-dem-click-trang-chu" data-ma-khoa-hoc="' + maHoaHTML(khoaHocThich.id) + '">' + maHoaHTML(khoaHocThich.title) + '</a>';
             maHTMLYeuThich += '      <div class="text-danger fw-semibold small">' + maHoaHTML(dinhDangTienVND(khoaHocThich.salePrice)) + '</div>';
             maHTMLYeuThich += '    </div>';
             maHTMLYeuThich += '  </div>';
@@ -170,7 +192,7 @@ function hienThiKhuVucCaNhanHoa() {
             maHTMLVuaXem += '  <div class="d-flex align-items-center gap-2">';
             maHTMLVuaXem += '    <img src="' + maHoaHTML(anhXem) + '" alt="' + maHoaHTML(khoaHocXem.title) + '" class="rounded anh-san-pham-thanh-toan">';
             maHTMLVuaXem += '    <div class="overflow-hidden">';
-            maHTMLVuaXem += '      <a href="course-detail.html?id=' + maUrlXem + '" class="fw-bold text-dark text-decoration-none d-block text-truncate lien-ket-dem-click-trang-chu" data-ma-khoa-hoc="' + maHoaHTML(khoaHocXem.id) + '">' + maHoaHTML(khoaHocXem.title) + '</a>';
+            maHTMLVuaXem += '      <a href="' + layDuongDanTrang('course-detail.html?id=' + maUrlXem) + '" class="fw-bold text-dark text-decoration-none d-block text-truncate lien-ket-dem-click-trang-chu" data-ma-khoa-hoc="' + maHoaHTML(khoaHocXem.id) + '">' + maHoaHTML(khoaHocXem.title) + '</a>';
             maHTMLVuaXem += '      <div class="text-muted small"><i class="bi bi-eye me-1"></i>' + Number(khoaHocXem.views || 0) + ' lượt xem</div>';
             maHTMLVuaXem += '    </div>';
             maHTMLVuaXem += '  </div>';
@@ -178,4 +200,51 @@ function hienThiKhuVucCaNhanHoa() {
         }
         vungVuaXem.innerHTML = maHTMLVuaXem;
     }
+}
+
+function capNhatGiaoDienKhiDongBoTab(khoaThayDoi) {
+    if (khoaThayDoi === 'EDU_COURSES' || khoaThayDoi === 'EDU_FAVORITES' || khoaThayDoi === 'EDU_RECENT_VIEWED' || khoaThayDoi === 'EDU_CATEGORIES' || khoaThayDoi === 'EDU_FEATURED_CONFIG' || khoaThayDoi === 'EDU_VIEW_LOGS' || khoaThayDoi === 'EDU_CART_LOGS' || khoaThayDoi === 'EDU_PURCHASES') {
+        hienThiDanhMucNoiBat();
+        hienThiKhoaHocQuanTamNhat30Ngay();
+    hienThiKhoaHocNoiBatTheoCauHinh();
+        hienThiKhuVucKhoaHoc('vung-khoa-hoc-ban-chay', layKhoaHocKhuyenMai().slice(0, 4));
+        hienThiKhuVucKhoaHoc('vung-khoa-hoc-moi', layKhoaHocMoi().slice(0, 4));
+        hienThiKhuVucCaNhanHoa();
+    }
+}
+
+function hienThiKhoaHocQuanTamNhat30Ngay() {
+    var khungChua = document.getElementById('vung-khoa-hoc-quan-tam-nhat');
+    if (!khungChua) return;
+    var bangQuanTam = tinhBangXepHangQuanTam30Ngay(4);
+    if (!bangQuanTam || bangQuanTam.length === 0) {
+        khungChua.className = '';
+        khungChua.innerHTML = '<div class="alert alert-light border text-center py-4 mb-0 text-muted"><i class="bi bi-compass fs-2 d-block mb-2 text-primary"></i>Chưa có dữ liệu tương tác trong 30 ngày gần nhất. Hãy xem chi tiết, yêu thích hoặc thêm khóa học vào giỏ để hệ thống cập nhật xu hướng thực tế!</div>';
+        return;
+    }
+    khungChua.className = 'khung-khoa-hoc-4';
+    var maHTML = '';
+    for (var i = 0; i < bangQuanTam.length; i++) {
+        maHTML += taoMaHTMLTheKhoaHoc(bangQuanTam[i].khoaHoc, 'trang-chu');
+    }
+    khungChua.innerHTML = maHTML;
+}
+
+function hienThiKhoaHocNoiBatTheoCauHinh() {
+    var khuVuc = document.getElementById('khu-vuc-khoa-hoc-noi-bat');
+    var khungChua = document.getElementById('vung-khoa-hoc-noi-bat');
+    if (!khungChua) return;
+    var danhSach = layDanhSachKhoaHocNoiBatHienThi(true);
+    if (!danhSach || danhSach.length === 0) {
+        if (khuVuc) khuVuc.classList.add('d-none');
+        khungChua.innerHTML = '';
+        return;
+    }
+    if (khuVuc) khuVuc.classList.remove('d-none');
+    var maHTML = '';
+    for (var i = 0; i < danhSach.length; i++) {
+        var tuyChon = { hienNhanDaSoHuu: (danhSach[i].cheDo === 'manual') };
+        maHTML += taoMaHTMLTheKhoaHoc(danhSach[i].khoaHoc, 'trang-chu', tuyChon);
+    }
+    khungChua.innerHTML = maHTML;
 }

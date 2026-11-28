@@ -210,7 +210,8 @@ function hienThiKhoaHocVaDonHangCuaToi() {
             var lopBadge = hopLeDon ? 'bg-success' : 'bg-secondary';
 
             maHTMLBang += '<tr>';
-            maHTMLBang += '  <td class="fw-bold text-primary">' + maHoaHTML(don.orderId) + '</td>';
+            var phuMaTT = don.paymentCode ? ('<div class="text-muted small fw-normal">CK: ' + maHoaHTML(don.paymentCode) + '</div>') : '';
+        maHTMLBang += '  <td class="fw-bold text-primary">' + maHoaHTML(don.orderId) + phuMaTT + '</td>';
             maHTMLBang += '  <td class="text-secondary small">' + maHoaHTML(don.createdAt) + '</td>';
             maHTMLBang += '  <td><div class="fw-semibold">' + maHoaHTML(danhSachTenMon) + '</div></td>';
             maHTMLBang += '  <td><div class="badge bg-info-subtle text-dark border">' + maHoaHTML(don.paymentMethod || 'Mô phỏng') + '</div></td>';

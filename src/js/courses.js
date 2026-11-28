@@ -7,6 +7,7 @@
 var SO_KHOA_HOC_MOI_TRANG = 9;
 var trangHienTai = 1;
 var danhSachDaLocHienTai = [];
+var nhomLocDangChon = 'ALL';
 
 document.addEventListener('DOMContentLoaded', function() {
     capNhatHuyHieuGioHang();
@@ -17,6 +18,16 @@ document.addEventListener('DOMContentLoaded', function() {
     var boLocDanhMuc = document.getElementById('bo-loc-danh-muc');
     if (danhMucTuUrl && boLocDanhMuc) {
         boLocDanhMuc.value = danhMucTuUrl;
+    }
+    var tuKhoaTuUrl = thamSoUrl.get('q');
+    var oTimKiemUrl = document.getElementById('o-tim-kiem-khoa-hoc');
+    if (tuKhoaTuUrl && oTimKiemUrl) {
+        oTimKiemUrl.value = tuKhoaTuUrl;
+    }
+    var nhomTuUrl = thamSoUrl.get('group');
+    if (nhomTuUrl === 'featured' || nhomTuUrl === 'promo' || nhomTuUrl === 'new') {
+        nhomLocDangChon = nhomTuUrl;
+        capNhatTrangThaiNutNhomLoc();
     }
 
     apDungBoLocKhoaHoc();
@@ -82,11 +93,37 @@ function ganSuKienBoLocKhoaHoc() {
     var nutDatLai = document.getElementById('nut-dat-lai-bo-loc');
 
     if (nutTimKiem) nutTimKiem.addEventListener('click', function() { trangHienTai = 1; apDungBoLocKhoaHoc(); });
-    if (oTimKiem) oTimKiem.addEventListener('input', function() { trangHienTai = 1; apDungBoLocKhoaHoc(); });
+    if (oTimKiem) {
+        oTimKiem.addEventListener('input', function() { trangHienTai = 1; apDungBoLocKhoaHoc(); });
+        if (typeof ganGoiYTimKiemTuDong === 'function' && oTimKiem.parentElement) {
+            ganGoiYTimKiemTuDong(oTimKiem, oTimKiem.parentElement);
+        }
+    }
     if (boLocDanhMuc) boLocDanhMuc.addEventListener('change', function() { trangHienTai = 1; apDungBoLocKhoaHoc(); });
     if (boLocTrinhDo) boLocTrinhDo.addEventListener('change', function() { trangHienTai = 1; apDungBoLocKhoaHoc(); });
     if (boLocMucGia) boLocMucGia.addEventListener('change', function() { trangHienTai = 1; apDungBoLocKhoaHoc(); });
     if (boLocSapXep) boLocSapXep.addEventListener('change', function() { trangHienTai = 1; apDungBoLocKhoaHoc(); });
+
+
+    var nutGiongNoi = document.getElementById('nut-tim-kiem-giong-noi-khoa-hoc');
+    if (nutGiongNoi && oTimKiem) {
+        nutGiongNoi.addEventListener('click', function() {
+            khoiChayTimKiemGiongNoi(oTimKiem, nutGiongNoi, function() {
+                trangHienTai = 1;
+                apDungBoLocKhoaHoc();
+            });
+        });
+    }
+
+    var cacNutNhom = document.querySelectorAll('.nut-loc-nhom-khoa-hoc');
+    for (var g = 0; g < cacNutNhom.length; g++) {
+        cacNutNhom[g].addEventListener('click', function() {
+            nhomLocDangChon = this.getAttribute('data-nhom-loc') || 'ALL';
+            capNhatTrangThaiNutNhomLoc();
+            trangHienTai = 1;
+            apDungBoLocKhoaHoc();
+        });
+    }
 
     if (nutDatLai) {
         nutDatLai.addEventListener('click', function() {
@@ -95,6 +132,8 @@ function ganSuKienBoLocKhoaHoc() {
             if (boLocTrinhDo) boLocTrinhDo.value = 'ALL';
             boLocMucGia.value = 'ALL';
             boLocSapXep.value = 'DEFAULT';
+            nhomLocDangChon = 'ALL';
+            capNhatTrangThaiNutNhomLoc();
             trangHienTai = 1;
             apDungBoLocKhoaHoc();
             hienThiThongBao('Đã đặt lại bộ lọc khóa học!', 'info');
@@ -103,7 +142,7 @@ function ganSuKienBoLocKhoaHoc() {
 }
 
 function apDungBoLocKhoaHoc() {
-    var tuKhoa = document.getElementById('o-tim-kiem-khoa-hoc').value.trim().toLowerCase();
+    var tuKhoa = boDauTiengViet(document.getElementById('o-tim-kiem-khoa-hoc').value);
     var danhMuc = document.getElementById('bo-loc-danh-muc').value;
     var boLocTrinhDo = document.getElementById('bo-loc-trinh-do');
     var trinhDo = boLocTrinhDo ? boLocTrinhDo.value : 'ALL';
@@ -115,10 +154,22 @@ function apDungBoLocKhoaHoc() {
 
     for (var i = 0; i < tatCaKhoaHoc.length; i++) {
         var khoaHoc = tatCaKhoaHoc[i];
-        var tieuDeThuong = (khoaHoc.title || '').toLowerCase();
-        var giangVienThuong = (khoaHoc.instructor || '').toLowerCase();
+        if (!kiemTraKhoaHocDangMo(khoaHoc)) {
+            continue;
+        }
+        var tieuDeKhongDau = boDauTiengViet(khoaHoc.title || '');
+        var giangVienKhongDau = boDauTiengViet(khoaHoc.instructor || '');
+        var danhMucKhongDau = boDauTiengViet(khoaHoc.category || '');
 
-        var khopTuKhoa = (tieuDeThuong.indexOf(tuKhoa) > -1) || (giangVienThuong.indexOf(tuKhoa) > -1);
+        var khopTuKhoa = (tuKhoa === '') || (tieuDeKhongDau.indexOf(tuKhoa) > -1) || (giangVienKhongDau.indexOf(tuKhoa) > -1) || (danhMucKhongDau.indexOf(tuKhoa) > -1);
+        var khopNhom = true;
+        if (nhomLocDangChon === 'featured') {
+            khopNhom = Boolean(khoaHoc.isFeatured);
+        } else if (nhomLocDangChon === 'promo') {
+            khopNhom = Number(khoaHoc.originalPrice || 0) > Number(khoaHoc.salePrice || 0) && Number(khoaHoc.salePrice || 0) > 0;
+        } else if (nhomLocDangChon === 'new') {
+            khopNhom = Boolean(khoaHoc.isNew);
+        }
         var khopDanhMuc = (danhMuc === 'ALL') || (khoaHoc.category === danhMuc);
         var khopTrinhDo = (trinhDo === 'ALL') || ((khoaHoc.level || 'Cơ bản') === trinhDo);
 
@@ -133,7 +184,7 @@ function apDungBoLocKhoaHoc() {
             khopGia = khoaHoc.salePrice > 450000;
         }
 
-        if (khopTuKhoa && khopDanhMuc && khopTrinhDo && khopGia) {
+        if (khopTuKhoa && khopNhom && khopDanhMuc && khopTrinhDo && khopGia) {
             danhSachDaLoc.push(khoaHoc);
         }
     }
@@ -227,5 +278,31 @@ function dongBoDanhMucBoLoc() {
             tuyChon.textContent = dm;
             boLocDanhMuc.appendChild(tuyChon);
         }
+    }
+}
+
+function capNhatTrangThaiNutNhomLoc() {
+    var cacNut = document.querySelectorAll('.nut-loc-nhom-khoa-hoc');
+    for (var i = 0; i < cacNut.length; i++) {
+        var nhom = cacNut[i].getAttribute('data-nhom-loc');
+        cacNut[i].classList.remove('btn-primary', 'btn-danger', 'btn-success', 'btn-outline-primary', 'btn-outline-danger', 'btn-outline-success');
+        if (nhom === nhomLocDangChon) {
+            if (nhom === 'promo') cacNut[i].classList.add('btn-danger');
+            else if (nhom === 'new') cacNut[i].classList.add('btn-success');
+            else cacNut[i].classList.add('btn-primary');
+        } else {
+            if (nhom === 'promo') cacNut[i].classList.add('btn-outline-danger');
+            else if (nhom === 'new') cacNut[i].classList.add('btn-outline-success');
+            else cacNut[i].classList.add('btn-outline-primary');
+        }
+    }
+}
+
+function capNhatGiaoDienKhiDongBoTab(khoaThayDoi) {
+    if (khoaThayDoi === 'EDU_COURSES' || khoaThayDoi === 'EDU_FAVORITES' || khoaThayDoi === 'EDU_CATEGORIES') {
+        if (typeof dongBoDanhMucBoLoc === 'function') {
+            dongBoDanhMucBoLoc();
+        }
+        apDungBoLocKhoaHoc();
     }
 }

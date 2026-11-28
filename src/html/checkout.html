@@ -6,23 +6,24 @@
     <title>Thanh Toán - EduCourses</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" type="image/svg+xml" href="../assets/images/logo-chinh.svg">
 </head>
 <body>
 
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top shadow-sm">
             <div class="container thanh-menu-dau-trang">
-                <a class="navbar-brand d-flex align-items-center" href="index.html">
-                    <img src="assets/images/logo.svg" alt="EduCourses Logo" class="anh-logo-thuong-hieu">
-                </a>
+                <a class="navbar-brand d-flex align-items-center" href="../../index.html">
+                    <img src="../assets/images/logo-chinh.svg" alt="EduCourses Logo" class="anh-logo-thuong-hieu">
+                <strong class="ms-2 fs-5 text-primary">EduCourses</strong></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#thanh-menu-chinh" aria-label="Mở menu">
                     <i class="navbar-toggler-icon d-inline-block"></i>
                 </button>
                 <div class="collapse navbar-collapse" id="thanh-menu-chinh">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" href="index.html">Trang chủ</a>
+                            <a class="nav-link" href="../../index.html">Trang chủ</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="about.html">Giới thiệu</a>
@@ -55,7 +56,7 @@
                 </ol>
             </nav>
 
-            <h2 class="fw-bold mb-4">Hoàn Tất Đăng Ký Khóa Học</h2>
+            <h1 class="h2 fw-bold mb-4">Hoàn Tất Đăng Ký Khóa Học</h1>
 
             <div class="luoi-trang-thanh-toan">
                 <section class="card border-0 shadow-sm">
@@ -82,24 +83,46 @@
                             </div>
 
                             <div id="nhom-dia-chi-da-luu" class="mb-3">
-                                <label for="dia-chi-thanh-toan" class="form-label fw-semibold">Ghi chú / Địa chỉ hóa đơn (tùy chọn – khóa học trực tuyến, không giao hàng vật lý)</label>
-                                <input type="text" class="form-control" id="dia-chi-thanh-toan" placeholder="Nhập địa chỉ liên hệ của bạn">
+                                <label for="dia-chi-thanh-toan" class="form-label fw-semibold">Địa chỉ mặc định của người đăng ký</label>
+                                <input type="text" class="form-control bg-light" id="dia-chi-thanh-toan" placeholder="Địa chỉ mặc định từ tài khoản" readonly>
                             </div>
 
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" id="nut-chon-dia-chi-khac">
-                                <label class="form-check-label text-secondary fw-semibold" for="nut-chon-dia-chi-khac">
-                                    Nhập ghi chú hóa đơn bổ sung (nếu có)
-                                </label>
+                            <div class="border rounded-3 p-3 mb-3 bg-light">
+                                <div class="fw-semibold small text-dark mb-2">Hình thức nhận thông tin / địa chỉ hóa đơn:</div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="recipientMode" id="che-do-nguoi-nhan-mac-dinh" value="self" checked>
+                                    <label class="form-check-label fw-semibold" for="che-do-nguoi-nhan-mac-dinh">
+                                        Dùng địa chỉ mặc định của tài khoản đăng ký
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="recipientMode" id="che-do-nguoi-nhan-khac" value="other">
+                                    <label class="form-check-label fw-semibold text-primary" for="che-do-nguoi-nhan-khac">
+                                        Gửi cho người khác (Nhập địa chỉ mới)
+                                    </label>
+                                </div>
                             </div>
 
-                            <div id="hop-nhap-dia-chi-khac" class="mb-3 d-none">
-                                <label for="o-nhap-dia-chi-khac" class="form-label fw-semibold text-primary">Ghi chú hóa đơn bổ sung</label>
-                                <input type="text" class="form-control border-primary" id="o-nhap-dia-chi-khac" placeholder="Nhập số nhà, tên đường, phường/xã, tỉnh/thành phố...">
+                            <div id="hop-nhap-dia-chi-khac" class="border border-primary rounded-3 p-3 mb-4 bg-white d-none">
+                                <h6 class="fw-bold text-primary mb-3"><i class="bi bi-gift me-1"></i>Thông tin &amp; Địa chỉ người nhận mới</h6>
+                                <div class="row g-2 mb-2">
+                                    <div class="col-md-6">
+                                        <label for="ho-ten-nguoi-nhan-khac" class="form-label small fw-semibold">Họ tên người nhận *</label>
+                                        <input type="text" class="form-control" id="ho-ten-nguoi-nhan-khac" placeholder="Nhập họ tên người nhận">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="so-dien-thoai-nguoi-nhan-khac" class="form-label small fw-semibold">SĐT người nhận (10 số) *</label>
+                                        <input type="tel" class="form-control" id="so-dien-thoai-nguoi-nhan-khac" minlength="10" maxlength="10" placeholder="Nhập 10 chữ số">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="o-nhap-dia-chi-khac" class="form-label small fw-semibold">Địa chỉ người nhận mới *</label>
+                                    <input type="text" class="form-control border-primary" id="o-nhap-dia-chi-khac" placeholder="Nhập đầy đủ số nhà, tên đường, phường/xã, tỉnh/thành phố...">
+                                </div>
                             </div>
 
                             <h4 class="fw-bold mt-4 mb-3">Phương thức thanh toán</h4>
-                            
+
                             <div class="form-check border p-3 rounded mb-2 bg-white">
                                 <input class="form-check-input ms-1" type="radio" name="paymentMethod" id="phuong-thuc-ma-qr" value="Quét mã QR minh họa (Mô phỏng)" checked>
                                 <label class="form-check-label fw-semibold ms-2 d-flex align-items-center" for="phuong-thuc-ma-qr">
@@ -121,17 +144,63 @@
                                 </label>
                             </div>
 
-                            <div id="khung-thanh-toan-qr" class="card bg-light border-warning mb-4">
-                                <div class="card-body text-center p-4">
-                                    <div class="alert alert-warning py-2 px-3 small fw-semibold mb-3">
-                                        <i class="bi bi-exclamation-triangle-fill me-1"></i>MÔ PHỎNG – QR không dùng để chuyển tiền, không kết nối ngân hàng, không xác nhận giao dịch thật.
+                            <div id="khung-thanh-toan-qr" class="card bg-light border-primary mb-4">
+                                <div class="card-body p-4">
+                                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                                        <h6 class="fw-bold text-primary mb-0"><i class="bi bi-qr-code-scan me-1"></i>Cổng Thanh Toán VietQR Tự Động</h6>
+                                        <div class="badge bg-danger-subtle text-danger px-3 py-2 fw-bold">
+                                            <i class="bi bi-clock-history me-1"></i>Hết hạn sau: <strong id="dong-ho-dem-nguoc-vietqr">15:00</strong>
+                                        </div>
                                     </div>
-                                    <h6 class="fw-bold text-primary mb-2"><i class="bi bi-qr-code me-1"></i>Khung Mã QR Minh Họa (Demo Front-end)</h6>
-                                    <div class="d-inline-flex flex-column align-items-center justify-content-center border rounded bg-white p-4 shadow-sm mb-3">
-                                        <i class="bi bi-qr-code display-1 text-secondary"></i>
-                                        <small class="badge bg-warning text-dark mt-2">QR DEMO – KHÔNG CHUYỂN TIỀN</small>
+                                    <div class="row g-3 align-items-center">
+                                        <div class="col-md-5 text-center">
+                                            <img id="anh-vietqr-dong" src="" alt="Mã QR VietQR Thanh Toán" class="img-fluid rounded-3 border bg-white p-2 shadow-sm anh-vietqr-chinh d-none">
+                                            <div id="khung-svg-ma-qr" class="d-inline-block p-2 bg-white border rounded-3 shadow-sm khung-qr-svg"></div>
+                                            <div class="small text-muted mt-2">Quét mã bằng ứng dụng Ngân hàng</div>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="bg-white border rounded-3 p-3 small">
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <div class="text-muted">Ngân hàng:</div>
+                                                    <strong class="text-dark">MB Bank (Quân Đội)</strong>
+                                                </div>
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <div class="text-muted">Số tài khoản:</div>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <strong id="vietqr-so-tai-khoan" class="text-primary">0372765126</strong>
+                                                        <button type="button" class="btn btn-outline-secondary btn-sm py-0 px-2 nut-copy-nhanh-vietqr" data-muc-tieu="vietqr-so-tai-khoan" title="Copy STK" aria-label="Copy STK"><i class="bi bi-clipboard"></i></button>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <div class="text-muted">Số tiền:</div>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <strong id="vietqr-so-tien" class="text-danger">0đ</strong>
+                                                        <button type="button" class="btn btn-outline-secondary btn-sm py-0 px-2 nut-copy-nhanh-vietqr" data-muc-tieu="vietqr-so-tien" title="Copy số tiền" aria-label="Copy số tiền"><i class="bi bi-clipboard"></i></button>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <div class="text-muted">Mã đơn / Nội dung CK:</div>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <strong id="hien-thi-ma-thanh-toan" class="text-danger">---</strong>
+                                                        <button type="button" class="btn btn-outline-secondary btn-sm py-0 px-2 nut-copy-nhanh-vietqr" data-muc-tieu="hien-thi-ma-thanh-toan" title="Copy nội dung" aria-label="Copy nội dung"><i class="bi bi-clipboard"></i></button>
+                                                    </div>
+                                                </div>
+                                                <div id="noi-dung-chuyen-khoan-qr" class="text-secondary mt-2 border-top pt-2">Chuyển đúng nội dung để hệ thống tự động đối soát.</div>
+                                            </div>
+                                            <div id="trang-thai-cho-vietqr" class="alert alert-info small py-2 px-3 mt-2 mb-2 d-flex align-items-center gap-2 d-none">
+                                                <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                                                <div>Đang tự động kiểm tra giao dịch mỗi 3 giây... Vui lòng chuyển khoản đúng nội dung!</div>
+                                            </div>
+                                            <div class="d-flex flex-wrap gap-2 mt-2">
+                                                <button type="button" id="nut-tao-lai-ma-thanh-toan" class="btn btn-outline-primary btn-sm">
+                                                    <i class="bi bi-arrow-clockwise me-1"></i>Tạo mã đơn mới
+                                                </button>
+                                                <button type="button" id="nut-mo-phong-webhook-paid" class="btn btn-outline-success btn-sm d-none">
+                                                    <i class="bi bi-lightning-charge-fill me-1"></i>Mô phỏng Webhook báo PAID (Test)
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div id="noi-dung-chuyen-khoan-qr" class="small text-danger fw-bold mt-1">MÔ PHỎNG – Mã giao dịch minh họa: EDUCOURSES</div>
                                 </div>
                             </div>
 
@@ -174,8 +243,8 @@
         <div class="container">
             <div class="bo-cuc-chan-trang pb-4 border-bottom border-secondary">
                 <section class="cot-thuong-hieu-chan-trang">
-                    <a href="index.html" class="d-inline-block">
-                        <img src="assets/images/logo-light.svg" alt="EduCourses Logo" class="anh-logo-chan-trang">
+                    <a href="../../index.html" class="d-inline-block">
+                        <img src="../assets/images/logo-chinh.svg" alt="EduCourses Logo" class="anh-logo-chan-trang">
                     </a>
                     <p class="text-secondary small mb-1">
                         Nền tảng học lập trình và công nghệ thông tin trực tuyến thực chiến. Cung cấp lộ trình bài bản, video bài giảng chất lượng cao và kích hoạt khóa học tự động 24/7.
@@ -196,7 +265,7 @@
                 <nav class="cot-lien-ket-chan-trang" aria-label="Liên kết chân trang">
                     <h6 class="fw-bold text-white text-uppercase mb-2">Liên Kết Nhanh</h6>
                     <ul class="list-unstyled small mb-2">
-                        <li class="mb-2"><a href="index.html" class="text-secondary text-decoration-none"><i class="bi bi-chevron-right me-1"></i>Trang chủ</a></li>
+                        <li class="mb-2"><a href="../../index.html" class="text-secondary text-decoration-none"><i class="bi bi-chevron-right me-1"></i>Trang chủ</a></li>
                         <li class="mb-2"><a href="about.html" class="text-secondary text-decoration-none"><i class="bi bi-chevron-right me-1"></i>Giới thiệu nền tảng</a></li>
                         <li class="mb-2"><a href="courses.html" class="text-secondary text-decoration-none"><i class="bi bi-chevron-right me-1"></i>Danh sách 55 khóa học</a></li>
                         <li class="mb-2"><a href="contact.html" class="text-secondary text-decoration-none"><i class="bi bi-chevron-right me-1"></i>Liên hệ & Hỗ trợ</a></li>
@@ -212,7 +281,7 @@
                 <aside class="cot-ban-do-chan-trang">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <h6 class="fw-bold text-white text-uppercase mb-0"><i class="bi bi-mortarboard-fill text-warning me-1"></i>Thông Tin Đồ Án</h6>
-                        
+
                     </div>
                     <div class="p-3 rounded border border-secondary bg-dark text-secondary small">
                         <div class="text-light fw-semibold mb-1">Khoa Công nghệ Thông tin – Trường ĐH Trà Vinh</div>
@@ -230,9 +299,9 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/storage.js"></script>
-    <script src="js/data.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/checkout.js"></script>
+    <script src="../js/storage.js"></script>
+    <script src="../js/data.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/checkout.js"></script>
 </body>
 </html>

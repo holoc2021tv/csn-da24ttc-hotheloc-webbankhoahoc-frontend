@@ -1,14 +1,15 @@
 /**
  * FILE: src/js/register.js
- * NHIEM VU: Xu ly form dang ky tai khoan hoc vien, kiem tra Captcha, sinh ma duy nhat va luu an toan vao EDU_USERS.
+ * NHIEM VU: Xu ly form dang ky tai khoan hoc vien (bat buoc dia chi mac dinh), kiem tra Captcha va luu vao EDU_USERS.
  */
 
 var maXacThucDangKyHienTai = '';
 
 document.addEventListener('DOMContentLoaded', function() {
+    var thamSo = new URLSearchParams(window.location.search || '');
     var phienHienTai = layNguoiDungHienTai();
-    if (phienHienTai && phienHienTai.email) {
-        window.location.replace('index.html');
+    if (phienHienTai && phienHienTai.email && thamSo.get('mode') !== 'add') {
+        window.location.replace(layDuongDanTrang('index.html'));
         return;
     }
     damBaoTaiKhoanQuanTri();
@@ -71,6 +72,12 @@ function ganSuKienBieuMauDangKy() {
             return;
         }
 
+        if (diaChi === '') {
+            hienThiThongBao('Vui lòng nhập địa chỉ mặc định khi đăng ký!', 'danger');
+            if (oDiaChi) oDiaChi.focus();
+            return;
+        }
+
         if (matKhau.length < 6) {
             hienThiThongBao('Mật khẩu quá ngắn! Vui lòng nhập tối thiểu 6 ký tự.', 'danger');
             oMatKhau.focus();
@@ -100,7 +107,7 @@ function ganSuKienBieuMauDangKy() {
         var danhSachNguoiDung = ketQuaDoc.duLieu.slice();
         var emailDaTonTai = false;
         for (var i = 0; i < danhSachNguoiDung.length; i++) {
-            if (danhSachNguoiDung[i].email && danhSachNguoiDung[i].email.toLowerCase() === email.toLowerCase()) {
+            if (danhSachNguoiDung[i] && typeof danhSachNguoiDung[i].email === 'string' && danhSachNguoiDung[i].email.toLowerCase() === email.toLowerCase()) {
                 emailDaTonTai = true;
                 break;
             }
@@ -120,7 +127,8 @@ function ganSuKienBieuMauDangKy() {
             phone: soDienThoai,
             address: diaChi,
             password: matKhau,
-            role: 'student',
+            role: 'user',
+            status: 'active',
             createdAt: thoiDiemHienTai.toLocaleDateString('vi-VN')
         };
 
@@ -130,7 +138,9 @@ function ganSuKienBieuMauDangKy() {
             return;
         }
 
+        var thamSoHienTai = new URLSearchParams(window.location.search || '');
+        var dichDangNhap = layDuongDanTrang(thamSoHienTai.get('mode') === 'add' ? 'login.html?mode=add' : 'login.html');
         luuThongBaoChoChuyenTrang('Đăng ký tài khoản thành công! Vui lòng đăng nhập để bắt đầu học tập.', 'success');
-        window.location.href = 'login.html';
+        window.location.href = dichDangNhap;
     });
 }

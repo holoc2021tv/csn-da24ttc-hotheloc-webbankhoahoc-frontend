@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="vongXanh" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d6efd"/>
+      <stop offset="100%" stop-color="#0a3d91"/>
+    </linearGradient>
+    <linearGradient id="vongCam" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff8a00"/>
+      <stop offset="100%" stop-color="#e8590c"/>
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="96" fill="#ffffff" stroke="url(#vongCam)" stroke-width="5"/>
+  <circle cx="100" cy="100" r="88" fill="none" stroke="url(#vongXanh)" stroke-width="3.5"/>
+  <path id="duongCongTren" d="M 32,102 A 68,68 0 0,1 168,102" fill="none"/>
+  <text font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="800" fill="#0a3d91" letter-spacing="1">
+    <textPath href="#duongCongTren" startOffset="50%" text-anchor="middle">EduCourses</textPath>
+  </text>
+  <polygon points="24,95 27,102 34,102 28,107 30,114 24,109 18,114 20,107 14,102 21,102" fill="#f97316"/>
+  <polygon points="176,95 179,102 186,102 180,107 182,114 176,109 170,114 172,107 166,102 173,102" fill="#f97316"/>
+  <path d="M 122,74 A 34,34 0 0,1 134,124" fill="none" stroke="url(#vongCam)" stroke-width="6" stroke-linecap="round"/>
+  <polygon points="100,66 134,82 100,98 66,82" fill="url(#vongXanh)"/>
+  <path d="M 77,89 L 77,108 C 77,114 87,119 100,119 C 113,119 123,114 123,108 L 123,89 L 100,100 Z" fill="#1d4ed8"/>
+  <path d="M 131,84 L 131,110" stroke="#f97316" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="131" cy="113" r="3.5" fill="#f97316"/>
+  <polygon points="94,98 116,110 94,122" fill="url(#vongCam)" stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M 58,132 Q 79,124 100,136 Q 121,124 142,132 L 142,143 Q 121,135 100,147 Q 79,135 58,143 Z" fill="url(#vongXanh)"/>
+  <path id="duongCongDuoi" d="M 30,106 A 70,70 0 0,0 170,106" fill="none"/>
+  <text font-family="Segoe UI, Arial, sans-serif" font-size="14.5" font-weight="800" fill="#0a3d91" letter-spacing="0.8">
+    <textPath href="#duongCongDuoi" startOffset="50%" text-anchor="middle">KẾT NỐI TRI THỨC</textPath>
+  </text>
+</svg>

@@ -646,17 +646,641 @@ iframe {
 }
 
 @media print {
-    header, nav, footer, .navbar, .btn, .modal-header .btn-close, .modal-footer {
+    @page {
+        size: A4 landscape;
+        margin: 8mm;
+    }
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        height: auto !important;
+        background: #ffffff !important;
+    }
+    body > *:not(#hop-thoai-chung-nhan) {
         display: none !important;
     }
-    body * {
-        visibility: hidden;
-    }
-    #hop-thoai-chung-nhan, #hop-thoai-chung-nhan * {
-        visibility: visible;
+    header, nav, footer, .navbar, .btn, .modal-header, .modal-footer, .khung-chat-noi, .toast-container, .modal-backdrop {
+        display: none !important;
     }
     #hop-thoai-chung-nhan {
-        position: static;
-        display: block;
+        position: static !important;
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    #hop-thoai-chung-nhan .modal-dialog {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    #hop-thoai-chung-nhan .modal-content,
+    #hop-thoai-chung-nhan .modal-body {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    .khung-chung-chi-in {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin: 0 auto !important;
+    }
+}
+
+
+/* =========================================================================
+   ADMIN DASHBOARD V2 (Sidebar Navy + Header + Main Content - Tach biet CSS)
+   ========================================================================= */
+.admin-body {
+    background-color: #f4f6fb;
+    overflow-x: hidden;
+}
+
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.admin-sidebar {
+    width: 260px;
+    background-color: #132347;
+    color: #dbe6ff;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    transition: width 0.2s ease, transform 0.25s ease;
+    z-index: 1040;
+}
+
+.admin-layout.admin-sidebar-collapsed .admin-sidebar {
+    width: 76px;
+}
+
+.admin-layout.admin-sidebar-collapsed .admin-nav-label,
+.admin-layout.admin-sidebar-collapsed .admin-brand-text,
+.admin-layout.admin-sidebar-collapsed .admin-sidebar-version {
+    display: none;
+}
+
+.admin-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.admin-sidebar-logo {
+    height: 30px;
+    width: auto;
+}
+
+.admin-sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 12px;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.admin-nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 11px 14px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: #c8d6f5;
+    font-weight: 500;
+    font-size: 0.94rem;
+    text-align: left;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.admin-nav-btn:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+.admin-nav-btn.active {
+    background-color: #2563eb;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.admin-sidebar-footer {
+    padding: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-main-wrapper {
+    flex-grow: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5eaf5;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+}
+
+.admin-header-left,
+.admin-header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+
+.admin-content {
+    padding: 24px;
+    flex-grow: 1;
+}
+
+.admin-card {
+    background-color: #ffffff;
+    border: 1px solid #e7ecf7;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(19, 35, 71, 0.04);
+}
+
+.admin-kpi-grid-v2 {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.admin-kpi-card {
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.admin-kpi-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.admin-kpi-icon-blue { background-color: #e8f1ff; color: #2563eb; }
+.admin-kpi-icon-green { background-color: #e6f7ee; color: #16a34a; }
+.admin-kpi-icon-orange { background-color: #fff3e6; color: #ea580c; }
+.admin-kpi-icon-purple { background-color: #f3e8ff; color: #9333ea; }
+
+
+.admin-chart-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    gap: 16px;
+}
+
+
+.admin-svg-chart {
+    width: 100%;
+    height: 220px;
+    display: block;
+}
+
+.admin-donut-svg {
+    width: 150px;
+    height: 150px;
+    flex-shrink: 0;
+}
+
+.admin-donut-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.admin-legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.admin-dot-blue { background-color: #2563eb; }
+.admin-dot-red { background-color: #ef4444; }
+.admin-dot-gray { background-color: #94a3b8; }
+
+.admin-sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(15, 23, 42, 0.45);
+    z-index: 1035;
+    display: none;
+}
+
+.admin-sidebar-backdrop.show {
+    display: block;
+}
+
+@media (max-width: 1199.98px) {
+    .admin-kpi-grid-v2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .admin-chart-grid,
+}
+
+@media (max-width: 991.98px) {
+    .admin-sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        transform: translateX(-100%);
+    }
+    .admin-sidebar.admin-sidebar-mobile-open {
+        transform: translateX(0);
+    }
+    .admin-header {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+    }
+    .admin-content {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .admin-kpi-grid-v2 {
+        grid-template-columns: 1fr;
+    }
+    .admin-search-wrap {
+        max-width: 100%;
+    }
+}
+
+/* ==========================================================================
+   BO SUNG GIAO DIEN TUAN 7 (ADMIN LOGIN, TIM KIEM GIONG NOI, CHAT DEMO, QR)
+   ========================================================================== */
+.trang-dang-nhap-quan-tri {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 55%, #0b2545 100%);
+}
+
+.khung-tim-kiem-menu {
+    min-width: 240px;
+    max-width: 340px;
+    flex: 1 1 240px;
+}
+
+.dang-ghi-am-giong-noi {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #ffffff;
+    animation: nhip-ghi-am 1s infinite;
+}
+
+@keyframes nhip-ghi-am {
+    0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.55); }
+    70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+}
+
+.menu-tai-khoan-rong {
+    min-width: 270px;
+}
+
+.anh-khoa-hoc-nho {
+    width: 68px;
+    height: 48px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.khung-qr-svg svg {
+    display: block;
+}
+
+.khung-chat-noi {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 1080;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.hop-chat-mo-rong {
+    width: 330px;
+    max-width: calc(100vw - 32px);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.vung-tin-nhan-chat {
+    height: 260px;
+    overflow-y: auto;
+    background-color: #f8fafc;
+}
+
+.tin-nhan-chat {
+    max-width: 85%;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+.tin-nhan-nguoi-dung {
+    background-color: #0d6efd;
+    color: #ffffff;
+}
+
+.tin-nhan-he-thong {
+    background-color: #ffffff;
+    color: #1e293b;
+    border: 1px solid #e2e8f0;
+}
+
+.nut-goi-y-chat {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+}
+
+.anh-logo-thuong-hieu,
+.anh-logo-chan-trang,
+.admin-sidebar-logo {
+    height: 42px;
+    width: 42px;
+    object-fit: cover;
+    border-radius: 50%;
+    background-color: #ffffff;
+    padding: 2px;
+}
+
+.anh-logo-chinh-dang-nhap {
+    width: 84px;
+    height: 84px;
+    object-fit: cover;
+    border-radius: 50%;
+    background-color: #ffffff;
+    padding: 4px;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.15);
+}
+
+/* ==========================================================================
+   SUA LOI Z-INDEX MENU, IN CHUNG CHI 1 TRANG, ADMIN SIDEBAR CO DINH
+   ========================================================================== */
+header .navbar,
+.navbar.sticky-top {
+    z-index: 1055;
+}
+
+.menu-tai-khoan-rong,
+.navbar .dropdown-menu {
+    z-index: 1065;
+}
+
+@media (min-width: 992px) {
+    .admin-sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        height: 100vh;
+        overflow-y: auto;
+    }
+    .admin-main-wrapper {
+        margin-left: 260px;
+        width: calc(100% - 260px);
+        transition: margin-left 0.2s ease, width 0.2s ease;
+    }
+    .admin-layout.admin-sidebar-collapsed .admin-main-wrapper {
+        margin-left: 76px;
+        width: calc(100% - 76px);
+    }
+}
+
+/* Dam bao modal co <form> boc .modal-body luon cuon muot va giu .modal-footer */
+.modal-dialog-scrollable .modal-content > form {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-height: calc(100vh - 3.5rem);
+}
+
+.modal-dialog-scrollable .modal-content > form .modal-body {
+    overflow-y: auto;
+    flex: 1 1 auto;
+}
+
+.modal-dialog-scrollable .modal-content > form .modal-header,
+.modal-dialog-scrollable .modal-content > form .modal-footer {
+    flex-shrink: 0;
+}
+
+/* Khung de xuat khoa hoc tu dong khi go tren thanh tim kiem */
+.khung-goi-y-tim-kiem {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    min-width: 290px;
+    max-height: 360px;
+    overflow-y: auto;
+    z-index: 1075;
+}
+
+.muc-goi-y-tim-kiem:hover {
+    background-color: #f1f5f9;
+}
+
+.anh-goi-y-tim-kiem {
+    width: 48px;
+    height: 34px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   DESIGN SYSTEM UPGRADE (BS5 OVERRIDES, FLUID TYPE, A11Y & 1024x600 NAVBAR)
+   ========================================================================== */
+:root {
+    --bs-primary: #0d6efd;
+    --bs-primary-rgb: 13, 110, 253;
+    --bs-body-font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --bs-border-radius: 0.75rem;
+    --edu-transition-smooth: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+h1, .h1 {
+    font-size: clamp(1.5rem, 2.2vw + 1rem, 2.5rem);
+}
+
+h2, .h2 {
+    font-size: clamp(1.25rem, 1.6vw + 0.85rem, 1.95rem);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid rgba(13, 110, 253, 0.45);
+    outline-offset: 2px;
+}
+
+/* Bao dam Navbar 1024x600 hien thi gon tren 1 hang duy nhat, khong rot dong */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .navbar .nav-link {
+        padding-left: 0.45rem;
+        padding-right: 0.45rem;
+        font-size: 0.88rem;
+        white-space: nowrap;
+    }
+    .navbar .btn {
+        font-size: 0.82rem;
+        padding: 0.35rem 0.6rem;
+        white-space: nowrap;
+    }
+    .khung-tim-kiem-menu {
+        min-width: 155px;
+        max-width: 205px;
+        margin-left: 0.5rem !important;
+        margin-right: 0.5rem !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Hop thoai chon tai khoan Google giao dien toi */
+.hop-thoai-google-toi {
+    background-color: #131314;
+    color: #e3e3e3;
+}
+
+.anh-dai-dien-google-nho {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #7c3aed;
+    color: #ffffff;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.nut-chon-tai-khoan-google:hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+}
+.loi-vao-kin-dao {
+    opacity: 0.28;
+    font-size: 0.85rem;
+    transition: opacity 0.2s ease;
+}
+
+.loi-vao-kin-dao:hover {
+    opacity: 0.85;
+}
+.anh-dai-dien-menu-google {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+/* ==========================================================================
+   ADMIN VISUAL DASHBOARD (4 KPI DA SAC + LUOI 2x2 BIEU DO TRUC QUAN)
+   ========================================================================== */
+.kpi-sac-teal {
+    background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+    color: #ffffff;
+}
+
+.kpi-sac-indigo {
+    background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
+    color: #ffffff;
+}
+
+.kpi-sac-emerald {
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    color: #ffffff;
+}
+
+.kpi-sac-rose {
+    background: linear-gradient(135deg, #db2777 0%, #ec4899 100%);
+    color: #ffffff;
+}
+
+.kpi-sac-teal h4,
+.kpi-sac-indigo h4,
+.kpi-sac-emerald h4,
+.kpi-sac-rose h4 {
+    color: #ffffff !important;
+    font-size: 1.55rem;
+}
+
+.kpi-sac-teal .kpi-nhan-tren,
+.kpi-sac-indigo .kpi-nhan-tren,
+.kpi-sac-emerald .kpi-nhan-tren,
+.kpi-sac-rose .kpi-nhan-tren,
+.kpi-sac-teal small,
+.kpi-sac-indigo small,
+.kpi-sac-emerald small,
+.kpi-sac-rose small {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.kpi-sac-teal .admin-kpi-icon,
+.kpi-sac-indigo .admin-kpi-icon,
+.kpi-sac-emerald .admin-kpi-icon,
+.kpi-sac-rose .admin-kpi-icon {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+}
+
+.admin-chart-grid-2x2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+@media (max-width: 1199.98px) {
+    .admin-chart-grid-2x2 {
+        grid-template-columns: 1fr;
     }
 }
